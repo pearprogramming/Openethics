@@ -124,7 +124,11 @@ TEMPLATE_DIRS = (
 )
 
 
-WORKING_DIRECTORY =()
+WORKING_DIRECTORY =(
+                    
+     os.path.join(dirname),  
+                    
+                    ) 
 
 
 
@@ -195,4 +199,6 @@ EMAIL_HOST_PASSWORD = ''
 EMAIL_USE_TLS = False
 DEFAULT_FROM_EMAIL = 'testing@example.com'
 
+QUESTIONNAIRE_URL = ("127.0.0.1:8000")
 
+SECRET_KEY = ("1234567890")
