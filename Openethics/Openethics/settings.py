@@ -5,6 +5,8 @@ TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
+    ('zaim', 'zaem241@gmail.com'),
+    
 )
 
 MANAGERS = ADMINS
@@ -121,6 +123,11 @@ TEMPLATE_DIRS = (
                  
 )
 
+
+WORKING_DIRECTORY =()
+
+
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -138,8 +145,7 @@ INSTALLED_APPS = (
     
     'basic.profiles',
     
-    
-    
+    'djangoquest',
     
 )
 

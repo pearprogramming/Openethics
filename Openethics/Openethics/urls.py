@@ -33,10 +33,10 @@ urlpatterns = patterns('',
           { 'template': 'index.html' }, 'index'),
 
 
+      url(r'^quest/', include('djangoquest.urls')),
+       
 
 
-
-
-
+          
 
 )
