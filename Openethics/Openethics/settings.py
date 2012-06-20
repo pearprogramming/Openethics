@@ -119,7 +119,7 @@ TEMPLATE_DIRS = (
      
      #os.path.join(dirname, './registration/'),
      os.path.join(dirname),            
-     #'/Users/pp239/GitHub/Openethics/Openethics/Openethics/',          
+     '/Users/mzd2/GitHub/Openethics/Question/',          
                  
 )
 
@@ -150,7 +150,7 @@ INSTALLED_APPS = (
     'basic.profiles',
     
     'djangoquest',
-    
+    'Question',
 )
 
 
