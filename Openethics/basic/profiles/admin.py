@@ -10,6 +10,9 @@ admin.site.register(Profile, ProfileAdmin)
 class ServiceAdmin(admin.ModelAdmin):
     list_display = ('profile', 'service')
     list_filter = ('profile', 'service')
+    
+    
+    
 admin.site.register(Service, ServiceAdmin)
 
 

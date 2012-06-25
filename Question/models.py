@@ -10,11 +10,14 @@ from django.db import models
 
 
 
-RATING_CHOICES = ((0, u"Good"), (1, u"Bad"), (2, u"Dunno"),)
-    
+RATING_CHOICES = ((0, u"Yes"), (1, u"No"), (2, u"Maybe"),)
 
+
+    
 class EvaluationScheme(models.Model):
     title = models.CharField(max_length=200)
+
+
 
 
 class Evaluation(models.Model):
@@ -29,7 +32,10 @@ class EvaluationQuestion(models.Model):
     def __unicode__(self):
         return self.question
 
+
+
 class EvaluationAnswer(models.Model):
     evaluation = models.ForeignKey(Evaluation)
     question = models.ForeignKey(EvaluationQuestion)
     answer = models.SmallIntegerField(choices=RATING_CHOICES)
+    
