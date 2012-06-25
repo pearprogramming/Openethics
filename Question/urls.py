@@ -14,7 +14,5 @@ urlpatterns = patterns('Question.views',
    
    # ),                       
 
-
-                       
-                       )
+)
 
