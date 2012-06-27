@@ -6,22 +6,31 @@ Created on 20 Jun 2012
 from django.contrib import admin
 from Question.models import *
 
-class EvaluationSchemeAdmin(admin.ModelAdmin):
+
+
+
+
+class PrescreenQuestionAdmin(admin.ModelAdmin):
+    list_display = ('PreQuestion','PreQuestionFlag')
+
+
+
+class QuestionSetAdmin(admin.ModelAdmin):
     list_display = ('title',)
 
-class EvaluationAdmin(admin.ModelAdmin):
-    list_display = ('doctor', 'agency','scheme')
+class UserAdmin(admin.ModelAdmin):
+    list_display = ('User', 'Type','Set')
 
-class EvaluationQuestionAdmin(admin.ModelAdmin):
-    list_display = ('question', 'evaluation')
+class QuestionBankAdmin(admin.ModelAdmin):
+    list_display = ('question', 'QSet')
 
 class EvaluationAnswerAdmin(admin.ModelAdmin):
     list_display = ('evaluation', 'question','answer')
     
 
 
-    
-admin.site.register(EvaluationScheme, EvaluationSchemeAdmin)
-admin.site.register(Evaluation, EvaluationAdmin)
-admin.site.register(EvaluationQuestion, EvaluationQuestionAdmin)
+admin.site.register(PrescreenQuestion, PrescreenQuestionAdmin)    
+admin.site.register(QuestionSet, QuestionSetAdmin)
+admin.site.register(User, UserAdmin)
+admin.site.register(QuestionBank, QuestionBankAdmin)
 admin.site.register(EvaluationAnswer, EvaluationAnswerAdmin)

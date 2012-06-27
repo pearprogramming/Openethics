@@ -119,7 +119,7 @@ TEMPLATE_DIRS = (
      
      #os.path.join(dirname, './registration/'),
      os.path.join(dirname),            
-     '/Users/mzd2/GitHub/Openethics/Question/',          
+     '/Users/mzd2/GitHub/Openethics/',          
                  
 )
 

@@ -7,7 +7,12 @@ urlpatterns = patterns('Question.views',
    url(r'^(?P<id>\d+)/$',
      'answer_form',
    
-    ),                        
+    ), 
+                       
+       url(r'^prescreen$',
+     'Prescreen',
+   
+    ),  
 
    # url(r'^(?P<id>\d+)/$',
    #  view='prepare_blank_answers',

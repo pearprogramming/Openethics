@@ -10,32 +10,55 @@ from django.db import models
 
 
 
-RATING_CHOICES = ((0, u"Yes"), (1, u"No"), (2, u"Maybe"),)
+RATING_CHOICES = ((0, u"Yes"), (1, u"No"), )
 
+#(2, u"Maybe"),
 
+# PrescreenQuestion, Question is built based on what has been selected yes!  
+class PrescreenQuestion(models.Model):
+    PreQuestion = models.CharField(max_length=200)
+    PreQuestionFlag = models.SmallIntegerField(choices=RATING_CHOICES)
     
-class EvaluationScheme(models.Model):
+    
+    def __unicode__(self):
+        return u"%s" % self.PreQuestion
+
+#Each Prescreen Question is linked to one Question Set
+class QuestionSet(models.Model):
     title = models.CharField(max_length=200)
+    PreQuestion = models.ForeignKey(PrescreenQuestion)
+
+    def __unicode__(self):
+        return u"%s" % self.title
 
 
-
-
-class Evaluation(models.Model):
-    doctor = models.CharField(max_length=200)
-    agency = models.CharField(max_length=200)
-    scheme = models.ForeignKey(EvaluationScheme)
-
-class EvaluationQuestion(models.Model):
+#Each Question in Question Bank will have one or more relationship with QuestionSet
+class QuestionBank(models.Model):
     question = models.CharField(max_length=200)
-    evaluation = models.ForeignKey(EvaluationScheme)
+    QSet = models.ForeignKey(QuestionSet)
 
     def __unicode__(self):
         return self.question
+    
+    
+class Answer(models.Model):
+    question = models.ForeignKey(QuestionBank)
+    answer = models.SmallIntegerField(choices=RATING_CHOICES)
 
 
+
+    
+class User(models.Model):
+    User = models.CharField(max_length=200)
+    Type = models.CharField(max_length=200)
+    Set = models.ForeignKey(QuestionSet)
+    
+    def __unicode__(self):
+        return u"%s" % self.User
 
 class EvaluationAnswer(models.Model):
-    evaluation = models.ForeignKey(Evaluation)
-    question = models.ForeignKey(EvaluationQuestion)
+    evaluation = models.ForeignKey(User)
+    question = models.ForeignKey(QuestionBank)
     answer = models.SmallIntegerField(choices=RATING_CHOICES)
+    
     

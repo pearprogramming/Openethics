@@ -1,0 +1,18 @@
+{% extends "profiles/base_profile.html" %}
+
+
+{% block title %}Prescreen Question{% endblock %}
+
+
+{% block content_title %}
+  <h2>Prescreen Question</h2>
+{% endblock %}
+
+
+{% block content %}
+  <ul class="link_list">
+    {% for Question in object_list %}
+    <li><a href="{{ QuestionSetList }}">{{ Question.PreQuestion }}</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}
