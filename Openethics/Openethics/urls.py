@@ -33,7 +33,10 @@ urlpatterns = patterns('',
           { 'template': 'index.html' }, 'index'),
 
 
+      ('^quest/', include('questionapp.urls')),
+      
 
+    
 
 
 
