@@ -4,7 +4,9 @@ from questionapp.views import *
 
 urlpatterns = patterns('questionapp.views',
         
-        url(r'^first/(?P<questiongroup_id>\d+)/$', 'first_questionset'),
+        url(r'^first/$', 
+            view = 'first_questionset',
+            name = 'first_questionset'),
                        
     
 )

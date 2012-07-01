@@ -59,6 +59,7 @@ class QuestionAnswer(models.Model):
     def save(self, *args, **kwargs):
         ''' On save, update timestamps '''
         if not self.id:
-            self.date_created = datetime.datetime.today()
-        self.date_edited= datetime.datetime.today()
+                       
+            self.date_created = datetime.now()
+        self.date_edited= datetime.now()
         super(QuestionAnswer, self).save(*args, **kwargs)
