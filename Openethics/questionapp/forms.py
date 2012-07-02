@@ -30,7 +30,7 @@ def make_question_group_form(questiongroup_id):
     #for question in scheme.questions.all():
     for question in thisgroupquestions:
         fields[question.label]= FIELD_TYPES[question.field_type] 
-           
+        
     return type('QuestionForm',(forms.BaseForm,),{'base_fields':fields})
 
 

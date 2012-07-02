@@ -28,15 +28,19 @@ def first_questionset(request):
     
     user=request.user
     questionForm = make_question_group_form(questiongroup_id)
+    
+    
+    
     if request.method =='POST':  
                  
         form = questionForm(request.POST)
-       
+        
         
         if  form.is_valid():
             
             formdata=get_answers(form)
             print formdata
+            
             for(question,answer) in formdata:
                 #save question and answer before redirect
                 
@@ -74,8 +78,7 @@ def get_answers(self):
     
     
     for question, answer in self.cleaned_data.items():
-        
-        
+        print self.cleaned_data.items()
         yield (question, answer)
         
 

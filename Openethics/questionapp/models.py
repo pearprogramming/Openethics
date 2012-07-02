@@ -63,5 +63,4 @@ class Questionnaire(models.Model):
     '''
     This class stores the list of order set
     '''
-        
-    
+    questiongroup=models.ManyToManyField(Questiongroup)   
