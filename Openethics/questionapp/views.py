@@ -108,6 +108,10 @@ def other_questionset(request,questiongroup_id):
                                   {'form': questionForm,},context_instance=RequestContext(request))
                 
 
+
+
+
+
 def get_next_questionsgroupid(questiongroup_id):
     '''
     responsible for retrieving  the next questionset to render 
