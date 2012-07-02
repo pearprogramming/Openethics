@@ -30,9 +30,10 @@ def first_questionset(request):
     questionForm = make_question_group_form(questiongroup_id)
     if request.method =='POST':             
         form = questionForm(request.POST)
+        
         if  form.is_valid():
-            formdata=get_answers(form)
             
+            formdata=get_answers(form)
             
             for(question,answer) in formdata:
                 #save question and answer before redirect
@@ -40,12 +41,14 @@ def first_questionset(request):
                 
                 thisinstance= QuestionAnswer(user=request.user,questiongroup=questiongroup_id,
                                 question=question,answer=answer,status=0)
-
+                
                 thisinstance.save()
                 #evaluate form fields values if any is true redirect to further questions
-            for(question,answer) in formdata:  
+                
+                
+            for(question,answer) in formdata:
                 if answer == 'True' :
-                        return HttpResponseRedirect(reverse
+                    return HttpResponseRedirect(reverse
                             ('questionapp.views.other_questionset',request, 
                                  kwargs={'username': request.user.username}))
                 else:
@@ -54,9 +57,11 @@ def first_questionset(request):
                                  kwargs={'username': request.user.username}))
                     
     else:
+        
         return render_to_response('questionform.html', 
                                   {'form': questionForm,},context_instance=RequestContext(request))
    
+
   
 def get_answers(self):
     '''
@@ -65,11 +70,8 @@ def get_answers(self):
     self.field[name].label is data for the object to be inserted to the QuestionAnswer
     '''
     
-    for question, value in self.cleaned_data.items():
-        
-        
-        
-        yield (self.fields[question].label, value)
+    for question, answer in self.cleaned_data.items():
+        yield (question, answer)
         
 
 
