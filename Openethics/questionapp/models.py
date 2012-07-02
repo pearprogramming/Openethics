@@ -17,7 +17,6 @@ class Questiongroup(models.Model):
     class Meta():
         db_table ='questiongroup'
     questiongroupname = models.CharField('question group name',max_length=255,unique=True)
-    date_created = models.DateTimeField('date created')
     order_no=models.IntegerField('rendering order ',unique=True)
     def __unicode__(self):
         return self.questiongroupname
@@ -40,26 +39,29 @@ class Question(models.Model):
     
 STATUS_TYPES =((0,'completed'),(1,'referred'),(2,'awaiting'),)
 
-class QuestionAnswer(models.Model):
+
+        
+
+class AnswerSet(models.Model):
     '''
     this class datamodel for storing users questions and answer 
 
     '''
     class Meta():
-        db_table ='questionanswer'
+        db_table ='answer_set'
     user=models.ForeignKey(User)
-    questiongroup=models.CharField(max_length=100)
-    question=models.CharField(max_length=100)
-    answer=models.CharField(max_length=250)                       
-    status = models.IntegerField(choices= STATUS_TYPES )
-    date_created     = models.DateTimeField(editable=False)
-    date_edited  = models.DateTimeField()
-     
+    question=models.ForeignKey(Question)
+    answer=models.CharField(max_length=250)
     
     def save(self, *args, **kwargs):
         ''' On save, update timestamps '''
-        if not self.id:
+        
                        
-            self.date_created = datetime.now()
-        self.date_edited= datetime.now()
-        super(QuestionAnswer, self).save(*args, **kwargs)
+        super(AnswerSet, self).save(*args, **kwargs)
+        
+class Questionnaire(models.Model):
+    '''
+    This class stores the list of order set
+    '''
+        
+    

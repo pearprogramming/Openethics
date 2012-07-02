@@ -10,11 +10,11 @@ class QuestionAdmin(admin.ModelAdmin):
     list_display=('questiongroup','label','field_type')
     
 class QuestiongroupAdmin(admin.ModelAdmin):
-    list_display=('questiongroupname','date_created','order_no')
+    list_display=('questiongroupname','order_no')
     
-class QuestionAnswerAdmin(admin.ModelAdmin):
-    list_display=('user','questiongroup','question','answer','status')
+class AnswerSetAdmin(admin.ModelAdmin):
+    list_display=('user','question','answer')
 
 admin.site.register(Question,QuestionAdmin)
-admin.site.register(QuestionAnswer,QuestionAnswerAdmin)
+admin.site.register(AnswerSet,AnswerSetAdmin)
 admin.site.register(Questiongroup,QuestiongroupAdmin)

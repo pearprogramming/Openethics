@@ -28,19 +28,21 @@ def first_questionset(request):
     
     user=request.user
     questionForm = make_question_group_form(questiongroup_id)
-    if request.method =='POST':             
+    if request.method =='POST':  
+                 
         form = questionForm(request.POST)
+       
         
         if  form.is_valid():
             
             formdata=get_answers(form)
-            
+            print formdata
             for(question,answer) in formdata:
                 #save question and answer before redirect
                 
                 
-                thisinstance= QuestionAnswer(user=request.user,questiongroup=questiongroup_id,
-                                question=question,answer=answer,status=0)
+                thisinstance= AnswerSet(user=request.user,
+                                question=question,answer=answer)
                 
                 thisinstance.save()
                 #evaluate form fields values if any is true redirect to further questions
@@ -70,7 +72,10 @@ def get_answers(self):
     self.field[name].label is data for the object to be inserted to the QuestionAnswer
     '''
     
+    
     for question, answer in self.cleaned_data.items():
+        
+        
         yield (question, answer)
         
 
@@ -97,7 +102,7 @@ def other_questionset(request,questiongroup_id):
             formdata=get_answers(form)
             for(question,answer) in formdata:
                 #save question and answer before redirect
-                thisinstance= QuestionAnswer(user=request.user,questiongroup_id=questiongroup_id,
+                thisinstance= AnswerSet(user=request.user,questiongroup_id=questiongroup_id,
                                 question=question,answer=answer,status=0)
                 thisinstance.save()
         return HttpResponseRedirect(reverse
