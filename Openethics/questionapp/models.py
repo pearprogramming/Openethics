@@ -16,7 +16,7 @@ class Questiongroup(models.Model):
     '''
     class Meta():
         db_table ='questiongroup'
-    questiongroupname = models.CharField('question group name',max_length=255,unique=True)
+    questiongroupnamex = models.CharField('question group name',max_length=255,unique=True)
     
     def __unicode__(self):
         return self.questiongroupname
