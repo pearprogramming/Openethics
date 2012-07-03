@@ -7,13 +7,24 @@ from django.contrib import admin
 from questionapp.models import *
  
 class QuestionAdmin(admin.ModelAdmin):
-    list_display=('questiongroup','label','field_type')
+    list_display=('label','field_type')
     
-class QuestiongroupAdmin(admin.ModelAdmin):
-    list_display=('questiongroupname','order_no')
+
     
 class AnswerSetAdmin(admin.ModelAdmin):
     list_display=('user','question','answer')
+
+
+class QuestionnaireInline(admin.TabularInline):
+    model = Questiongroup.question.through
+
+class QuestiongroupAdmin(admin.ModelAdmin):
+    inlines = [
+               QuestionnaireInline,
+    ]
+    exclude=('question',)
+    
+
 
 admin.site.register(Question,QuestionAdmin)
 admin.site.register(AnswerSet,AnswerSetAdmin)
