@@ -17,12 +17,22 @@ class AnswerSetAdmin(admin.ModelAdmin):
 
 
 class QuestiongroupAdmin(admin.ModelAdmin):
-    list_display=('questiongroupname', 'question')
+    list_display=('questiongroupname',)
     
 
+
+class QuestionnaireInline(admin.TabularInline):
+    model = Questionnaire.questiongroup.through
+    
+class QuestionnaireAdmin(admin.ModelAdmin):
+    inlines = [
+               QuestionnaireInline,
+               ]
+    exclude = ('questiongroup',)
     
 
 
 admin.site.register(Question,QuestionAdmin)
 admin.site.register(AnswerSet,AnswerSetAdmin)
 admin.site.register(Questiongroup,QuestiongroupAdmin)
+admin.site.register(Questionnaire,QuestionnaireAdmin)
