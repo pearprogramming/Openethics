@@ -15,14 +15,11 @@ class AnswerSetAdmin(admin.ModelAdmin):
     list_display=('user','question','answer')
 
 
-class QuestionnaireInline(admin.TabularInline):
-    model = Questiongroup.question.through
 
 class QuestiongroupAdmin(admin.ModelAdmin):
-    inlines = [
-               QuestionnaireInline,
-    ]
-    exclude=('question',)
+    list_display=('questiongroupname', 'question')
+    
+
     
 
 

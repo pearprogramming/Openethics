@@ -23,7 +23,7 @@ class Question(models.Model):
     
     label=models.CharField('question',max_length=255)
     field_type=models.IntegerField(choices=FIELD_TYPE_CHOICES)
-    
+    #value=models.CharField(max_length=255)
     def __unicode__(self):
         return self.label
     
@@ -37,7 +37,7 @@ class Questiongroup(models.Model):
     class Meta():
         db_table ='questiongroup'
     questiongroupname = models.CharField('question group name',max_length=255,unique=True)
-    question=models.ManyToManyField(Question)
+    question=models.ForeignKey(Question)
     def __unicode__(self):
         return self.questiongroupname
 
