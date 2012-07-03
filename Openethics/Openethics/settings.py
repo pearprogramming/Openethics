@@ -139,6 +139,8 @@ INSTALLED_APPS = (
     
     'basic.profiles',
     
+    #'basic.blog',
+    
     'Openethics',
     
     'questionapp',
