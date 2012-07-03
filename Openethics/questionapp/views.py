@@ -3,8 +3,9 @@ Created on Jun 26, 2012
 
 @author: ayoola_al
 '''
-from models import *
-from forms import *
+from django.shortcuts import get_object_or_404
+from models import AnswerSet, Question
+from forms import make_question_group_form
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.forms import forms
@@ -41,9 +42,10 @@ def first_questionset(request):
             formdata=get_answers(form)
             print formdata
             
-            for(question,answer) in formdata:
+            for(question_id,answer) in formdata:
                 #save question and answer before redirect
                 
+                question = get_object_or_404(Question, pk=question_id) 
                 
                 thisinstance= AnswerSet(user=request.user,
                                 question=question,answer=answer)
@@ -51,16 +53,16 @@ def first_questionset(request):
                 thisinstance.save()
                 #evaluate form fields values if any is true redirect to further questions
                 
-                
-            for(question,answer) in formdata:
-                if answer == 'True' :
-                    return HttpResponseRedirect(reverse
-                            ('questionapp.views.other_questionset',request, 
-                                 kwargs={'username': request.user.username}))
-                else:
-                    return HttpResponseRedirect(reverse
-                            ('questionapp.views.success',request, 
-                                 kwargs={'username': request.user.username}))
+            return HttpResponseRedirect(reverse('questionapp_success'))    
+#            for(question,answer) in formdata:
+#                if answer == 'True' :
+#                    return HttpResponseRedirect(reverse
+#                            ('questionapp.views.other_questionset',request, 
+#                                 kwargs={'username': request.user.username}))
+#                else:
+#                    return HttpResponseRedirect(reverse
+#                            ('questionapp.views.success',request, 
+#                                 kwargs={'username': request.user.username}))
                     
     else:
         
@@ -68,7 +70,9 @@ def first_questionset(request):
                                   {'form': questionForm,},context_instance=RequestContext(request))
    
 
-  
+def success_view(request):
+    return render_to_response('success.html') 
+    
 def get_answers(self):
     '''
     return question and answer pair tuple

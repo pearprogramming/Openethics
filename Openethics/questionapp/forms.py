@@ -4,10 +4,10 @@ Created on Jun 26, 2012
 @author: ayoola_al
 
 '''
-from django.forms import forms
+
 from django import forms
-from models import *
-from django.forms.fields import *
+from models import Questiongroup
+from django.forms.fields import CharField,BooleanField
 
 
 
@@ -29,7 +29,10 @@ def make_question_group_form(questiongroup_id):
     
     #for question in scheme.questions.all():
     for question in thisgroupquestions:
-        fields[question.label]= FIELD_TYPES[question.field_type] 
+        
+        field = FIELD_TYPES[question.field_type] 
+        field.label = question.label
+        fields[str(question.id)]= field
         
     return type('QuestionForm',(forms.BaseForm,),{'base_fields':fields})
 
