@@ -4,7 +4,7 @@ Created on Jun 26, 2012
 @author: ayoola_al
 '''
 from django.shortcuts import get_object_or_404
-from models import AnswerSet, Question
+from models import *
 from forms import make_question_group_form
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
@@ -15,6 +15,7 @@ from django.contrib.auth.models import  User
 from django.contrib.auth.decorators import login_required
 from questionapp.forms import *
 
+
 @login_required
 def first_questionset(request):
     
@@ -24,7 +25,15 @@ def first_questionset(request):
      
     '''
     #this variable sets the first page of the question!
+    
+    
+    Q_order = QuestionOrder.objects.get(questiongroup=1)
+    print Q_order.order_info
+    
+    #This need to be fixed, the first questiongroup id should be the one that is being accessed from the 
+    #first item in Questionnaire list
     questiongroup_id=1
+    
     
     
     user=request.user
@@ -72,6 +81,19 @@ def first_questionset(request):
 
 def success_view(request):
     return render_to_response('success.html') 
+
+
+def get_next_questionsgroupid(questiongroup_id):
+    '''
+    responsible for retrieving  the next questionset to render 
+    @return: the next question group id
+    '''
+    
+    
+    
+    pass
+
+
     
 def get_answers(self):
     '''
@@ -124,9 +146,3 @@ def other_questionset(request,questiongroup_id):
 
 
 
-def get_next_questionsgroupid(questiongroup_id):
-    '''
-    responsible for retrieving  the next questionset to render 
-    @return: the next question group id
-    '''
-    pass

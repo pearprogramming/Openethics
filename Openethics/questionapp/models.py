@@ -65,4 +65,18 @@ class Questionnaire(models.Model):
     This class stores the list of order set
     '''
     name=models.CharField(max_length=250)
-    questiongroup=models.ManyToManyField(Questiongroup)   
+    questiongroup=models.ManyToManyField(Questiongroup, through='QuestionOrder')
+    
+    def __unicode__(self):
+        return self.name
+    
+class QuestionOrder(models.Model):
+    '''
+    This class stores the ordering of the question rendered on the page
+    '''
+    questiongroup=models.ForeignKey(Questiongroup)
+    questionnaire=models.ForeignKey(Questionnaire)
+    order_info=models.IntegerField(max_length=3)
+    
+    def __unicode__(self):
+        return self.order_info
