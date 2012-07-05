@@ -17,7 +17,7 @@ from questionapp.forms import *
 
 
 @login_required
-def first_questionset(request):
+def first_questionset(request, questiongroup_id):
     
     '''
     responsible for processing form for the first questions group e.g prescreening questions
@@ -27,8 +27,12 @@ def first_questionset(request):
     #this variable sets the first page of the question!
     
     
-    Q_order = QuestionOrder.objects.get(questiongroup=1)
-    print Q_order.order_info
+    #Q_order = QuestionOrder.objects.get(questiongroup=1)
+    #print Q_order.order_info
+    
+   
+    
+    
     
     #This need to be fixed, the first questiongroup id should be the one that is being accessed from the 
     #first item in Questionnaire list
@@ -83,15 +87,25 @@ def success_view(request):
     return render_to_response('success.html') 
 
 
-def get_next_questionsgroupid(questiongroup_id):
+def get_next_questionsgroupid(request,order_info):
     '''
     responsible for retrieving  the next questionset to render 
     @return: the next question group id
     '''
+    if order_info == 1:
+        #move to the first_questionset view!
+        return HttpResponseRedirect(reverse('first_questionset', context = order_info ))
+        #else count all question group inside a questionnaire
+        
     
+    else:    
     
-    
-    pass
+        Q_count = QuestionOrder.objects.count()
+        print Q_count
+
+        order_info = 1
+        
+        return HttpResponseRedirect(reverse('first_questionset', context = order_info ))
 
 
     

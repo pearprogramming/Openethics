@@ -11,6 +11,11 @@ urlpatterns = patterns('questionapp.views',
         url(r'^success/$', 
             view = 'success_view',
             name = 'questionapp_success'),               
+        
+        url(r'^get/(?P<order_info>\d+)$', 
+            view = 'get_next_questionsgroupid',
+            name = 'get_next_questionsgroupid'),               
+    
     
 )
 
