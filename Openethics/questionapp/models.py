@@ -61,7 +61,7 @@ class Answers(models.Model):
             
 class Questionnaire(models.Model):
     '''
-    This class stores the list of order set
+    This class stores the list of questionnaire set
     '''
     class Meta():
         db_table='questionnaire'

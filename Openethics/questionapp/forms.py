@@ -6,8 +6,9 @@ Created on Jun 26, 2012
 '''
 
 from django import forms
-from models import Questiongroup
-from django.forms.fields import CharField,BooleanField
+from models import Questiongroup,Questionnaire
+from django.forms.fields import CharField,BooleanField,TextField
+from views import get_total_questionnaire_questions,get_questionnnaire_name
 
 
 
@@ -16,25 +17,26 @@ FIELD_TYPES={
             1: CharField(widget = forms.Textarea),
             2: BooleanField(initial= False)
             }
-def make_question_group_form(questiongroup_id):
+def make_question_group_form(thisquestionnaire_grouplist):
     '''
      mapping questions fields  type  to form fields type 
-     @return: type form for specific questiongroup 
+     create form for questionnaire
+     @return: type form for given questionnaire
     
     '''
     fields={}
-    thisgroupquestions = Questiongroup.objects.get(id=questiongroup_id).questions.all()
-    
-    
-    
-    #for question in scheme.questions.all():
-    for question in thisgroupquestions:
+    questionnairename=get_questionnnaire_name
+
+    for questiongroups in thisquestionnaire_grouplist:
+        thisgroupquestions = Questiongroup.objects.get(pk=questiongroup_id).questions.all()
         
-        field = FIELD_TYPES[question.field_type] 
-        field.label = question.label
-        fields[str(question.id)]= field
+        for question in thisgroupquestions:
+            fields[question.label]= FIELD_TYPES[question.field_type]
+#        field = FIELD_TYPES[question.field_type] 
+#       field.label = question.label
+#        fields[str(question.id)]= field
         
-    return type('QuestionForm',(forms.BaseForm,),{'base_fields':fields})
+    return type(questionnairename,(forms.BaseForm,),{'base_fields':fields})
 
 
             
