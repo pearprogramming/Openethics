@@ -150,7 +150,7 @@ def questionnaire_questions(request,questionnaire_id=questionnaire_id):
             formset = QuestionsFormset( prefix='%s_Form' %thisquestionnairename)
         
     return render_to_response('questionnaire.html', 
-                                  {'formset':formset},thisquestionnairename,context_instance=RequestContext(request))
+                                  {'formset':formset},{'questionnaire': thisquestionnairename },context_instance=RequestContext(request))
     
     
 
