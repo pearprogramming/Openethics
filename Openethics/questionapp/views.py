@@ -109,35 +109,7 @@ def get_questionnnaire_name(questionnaire_id):
     '''
     thisquestionnaire=get_object_or_404(Questionnaire,pk=questionnaire_id)
     return thisquestionnaire.name
-    
-def other_questionset(request,questiongroup_id):
-    '''
-    view  for processing form for other questionsgroups 
-    save the instance and redirect to next question groups
-    
-    '''
-    user=request.user
-    
-    
-    questionForm = make_question_group_form(questiongroup_id=questiongroup_id)
-    if request.method =='POST':  
-        form = questionForm(request.POST)
-        if  form.is_valid():
-            formdata=get_answers(form)
-            for(question,answer) in formdata:
-                #save question and answer before redirect
-                thisinstance= AnswerSet(user=request.user,questiongroup_id=questiongroup_id,
-                                question=question,answer=answer,status=0)
-                thisinstance.save()
-        return HttpResponseRedirect(reverse
-                            ('questionapp.views.success',request, 
-                                 kwargs={'username': request.user.username}))
-    else:
-        thisquestionnaire_name=get_object_or_404(Questionnaire,pk=questionnaire_id)
-        return render_to_response('questionform.html', 
-                                  {'form': questionForm,},context_instance=RequestContext(request))
-                
-
+                    
 
 def questionnaire_questions(request,questionnaire_id=questionnaire_id):
     '''
@@ -176,13 +148,24 @@ def questionnaire_questions(request,questionnaire_id=questionnaire_id):
         for  form in [formset]:
             formset = QuestionsFormset( prefix='%s_Form' %questiongroup_id)
         
-    return render_to_response('otherquestionform2.html', 
+    return render_to_response('questionnaire.html', 
                                   {'formset':formset},context_instance=RequestContext(request))
     
     
-def get_next_questionsgroupid(questiongroup_id):
+
+def get_next_questionsgroupid(questionnaire_id,questiongroup_id):
     '''
-    responsible for retrieving  the next questionset to render 
-    @return: the next question group id
+    generator for retrieving  the next  question group id in a question
+    @return: the next question group id if exists else return false if list is empty
+    
     '''
-    pass   
+    grouplist=get_questionnaire_groupidlist(questionnaire_id)
+    if not grouplist :
+        return False
+    else:            
+      cycle= True
+      while cycle:
+        for i, group_id in enumerate(grouplist):
+            thisgroup_id = group_id
+            nextgroup_id = grouplist[(i + 1) % len(grouplist)]
+            yield nextgroup_id
