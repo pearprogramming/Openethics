@@ -65,50 +65,7 @@ def first_questionset(request):
 def success_view(request):
     return render_to_response('success.html') 
     
-def get_answers(self):
-    '''
-    return question and answer pair tuple
-    
-    '''  
-    for question, answer in self.cleaned_data.items():
-        yield(question,answer)
 
-def get_total_group_questions(questiongroup_id):
-    '''
-    @return: total number of questions in the given questiongroup
-    '''
-    totalcount =  Questiongroup.objects.get(pk=questiongroup_id).questions.all().count()
-    return totalcount
-
-
-def get_total_questionnaire_questions(groupidlist):
-    '''
-    @return: total number of questions in the questionaire
-    '''
-    for groupid in groupidlist:
-      totalcount =  Questiongroup.objects.get(pk=questiongroup_id).questions.all().count() 
-      totalcount += totalcount
-    return totalcount
-
-def get_questionnaire_groupidlist(questionnaire_id):
-    '''
-    @return: list of questiongroups in this questionnaire
-    
-    '''
-    thisquestionnaire=get_object_or_404(Questionnaire,pk=questionnaire_id)
-    thisquestionnaire_groups=thisquestionnaire.questiongroups.all()
-    thisquestionnaire_grouplist=[]
- 
-    for qroup in list(thisquestionnaire_groups):
-        thisquestionnaire_grouplist.append(group.id)
-    
-    return thisquestionnaire_grouplist
-def get_questionnnaire_name(questionnaire_id):
-    '''
-    @return: questionnaire name
-    '''
-    thisquestionnaire=get_object_or_404(Questionnaire,pk=questionnaire_id)
-    return thisquestionnaire.name
                     
 
 def questionnaire_questions(request,questionnaire_id=questionnaire_id):
@@ -152,7 +109,6 @@ def questionnaire_questions(request,questionnaire_id=questionnaire_id):
     return render_to_response('questionnaire.html', 
                                   {'formset':formset},{'questionnaire': thisquestionnairename },context_instance=RequestContext(request))
     
-    
 
 def get_next_questionsgroupid(questionnaire_id,questiongroup_id):
     '''
@@ -170,3 +126,48 @@ def get_next_questionsgroupid(questionnaire_id,questiongroup_id):
             thisgroup_id = group_id
             nextgroup_id = grouplist[(i + 1) % len(grouplist)]
             yield nextgroup_id
+def get_answers(self):
+    '''
+    return question and answer pair tuple
+    
+    '''  
+    for question, answer in self.cleaned_data.items():
+        yield(question,answer)
+
+def get_total_group_questions(questiongroup_id):
+    '''
+    @return: total number of questions in the given questiongroup
+    '''
+    totalcount =  Questiongroup.objects.get(pk=questiongroup_id).questions.all().count()
+    return totalcount
+
+
+def get_total_questionnaire_questions(groupidlist):
+    '''
+    @return: total number of questions in the questionaire
+    '''
+    for groupid in groupidlist:
+      totalcount =  Questiongroup.objects.get(pk=questiongroup_id).questions.all().count() 
+      totalcount += totalcount
+    return totalcount
+
+def get_questionnaire_groupidlist(questionnaire_id):
+    '''
+    @return: list of questiongroups in this questionnaire
+    
+    '''
+    thisquestionnaire=get_object_or_404(Questionnaire,pk=questionnaire_id)
+    thisquestionnaire_groups=thisquestionnaire.questiongroups.all()
+    thisquestionnaire_grouplist=[]
+ 
+    for qroup in list(thisquestionnaire_groups):
+        thisquestionnaire_grouplist.append(group.id)
+    
+    return thisquestionnaire_grouplist
+
+def get_questionnnaire_name(questionnaire_id):
+    '''
+    @return: questionnaire name
+    '''
+    thisquestionnaire=get_object_or_404(Questionnaire,pk=questionnaire_id)
+    return thisquestionnaire.name
