@@ -39,10 +39,6 @@ class Question(models.Model):
         return self.label
     
 STATUS_TYPES =((0,'completed'),(1,'referred'),(2,'awaiting'),)
-
-
-
-
         
 
 class AnswerSet(models.Model):
@@ -56,13 +52,28 @@ class AnswerSet(models.Model):
     question=models.ForeignKey(Question)
     answer=models.CharField(max_length=250)
     
-    
+
     def save(self, *args, **kwargs):                       
         super(AnswerSet, self).save(*args, **kwargs)
-        
+
+class Answers(models.Model):
+    answerset=models.ForeignKey('AnswerSet',related_name='answers')
+            
 class Questionnaire(models.Model):
     '''
     This class stores the list of order set
     '''
+    class Meta():
+        db_table='questionnaire'
     name=models.CharField(max_length=250)
-    questiongroup=models.ManyToManyField(Questiongroup)   
+    questiongroups=models.ManyToManyField(Questiongroup,through='Questionnaire_Questiongroup')   
+
+class Questionnaire_Questiongroup(models.Model):
+    '''
+    define the association betwen Questionaire and Questiongroup 
+    
+    '''
+    class meta():
+        db_table='Questionnaire_Questiongroup'
+    questionnaire= models.ForeignKey(Questionnaire)
+    questiongroup= models.ForeignKey(Questiongroup)
