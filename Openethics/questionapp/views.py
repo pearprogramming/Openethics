@@ -117,6 +117,7 @@ def questionnaire_questions(request,questionnaire_id=questionnaire_id):
       get the form for the questionnnaire and process form data
 
     '''
+    thisquestionnairename= get_questionnnaire_name(questionnaire_id)
     thisquestionnaire_grouplist = get_questionnaire_groupidlist(questionnaire_id)
 #    create dynamicforms for  question groups in this quesnnaire 
     questionnaireForm= make_question_group_form(thisquestionnaire_grouplist)
@@ -127,7 +128,7 @@ def questionnaire_questions(request,questionnaire_id=questionnaire_id):
     
     if request.method =='POST':
         formset = QuestionnaireFormset(request.POST, request.FILES, prefix='%s_Form' %questionnaire_id)   
-                # retrieve each from multiple formset and valid    
+                # retrieve each from multiple formset and validate   
         for form in [formset]:
             if form.is_valid():
                 for i in xrange(0, get_total_questionnaire_questions(thisquestionnaire)):
@@ -146,10 +147,10 @@ def questionnaire_questions(request,questionnaire_id=questionnaire_id):
     else:
         formset = QuestionnaireFormset()
         for  form in [formset]:
-            formset = QuestionsFormset( prefix='%s_Form' %questiongroup_id)
+            formset = QuestionsFormset( prefix='%s_Form' %thisquestionnairename)
         
     return render_to_response('questionnaire.html', 
-                                  {'formset':formset},context_instance=RequestContext(request))
+                                  {'formset':formset},thisquestionnairename,context_instance=RequestContext(request))
     
     
 
