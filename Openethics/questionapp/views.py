@@ -87,26 +87,26 @@ def success_view(request):
     return render_to_response('success.html') 
 
 
-def get_next_questionsgroupid(request,order_info):
-    '''
-    responsible for retrieving  the next questionset to render 
-    @return: the next question group id
-    '''
-    if order_info == 1:
+#def get_next_questionsgroupid(request,order_info):
+ #   '''
+  #  responsible for retrieving  the next questionset to render 
+  #  @return: the next question group id
+   # '''
+   # if order_info == 1:
         #move to the first_questionset view!
-        return HttpResponseRedirect(reverse('first_questionset', context = order_info ))
+   #     return HttpResponseRedirect(reverse('first_questionset', context = order_info ))
         #else count all question group inside a questionnaire
-        
+   #     
     
-    else:    
+    #else:    
     
-        Q_count = QuestionOrder.objects.count()
-        print Q_count
+     #   Q_count = QuestionOrder.objects.count()
+      #  print Q_count
 
-        order_info = 1
+      #  order_info = 1
         
-        return HttpResponseRedirect(reverse('first_questionset', context = order_info ))
-
+      #  return HttpResponseRedirect(reverse('first_questionset', context = order_info ))
+#
 
     
 def get_answers(self):
