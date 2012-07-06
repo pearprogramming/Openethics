@@ -28,7 +28,7 @@ def make_question_group_form(thisquestionnairename,thisquestionnaire_grouplist):
     questionnairename=thisquestionnairename
 
     for questiongroup_id in thisquestionnaire_grouplist:
-        thisgroupquestions = Questiongroup.objects.get(pk=questiongroup_id).questions.all().order_by('id')
+        thisgroupquestions = Questiongroup.objects.get(pk=questiongroup_id).questions.all()
         
         for question in thisgroupquestions:
             fields[question.label]= FIELD_TYPES[question.field_type]
