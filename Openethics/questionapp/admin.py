@@ -25,12 +25,14 @@ class QuestionnaireInline(admin.TabularInline):
     model = Questionnaire.questiongroups.through
     
 class QuestionnaireAdmin(admin.ModelAdmin):
-    inlines = [
-               QuestionnaireInline,
-               ]
-    exclude = ('questiongroup',)
+    inlines = (
+               Questionnaire_QuestiongroupInline,
+               )
+#    exclude = ('questiongroup',)
     
-
+class Questionnaire_QuestiongroupInlinene(admin.TabularInline):
+    model = Questionnaire_Questiongroup
+    extra = 1
 
 admin.site.register(Question,QuestionAdmin)
 admin.site.register(AnswerSet,AnswerSetAdmin)
