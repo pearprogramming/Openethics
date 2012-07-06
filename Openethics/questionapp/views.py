@@ -178,5 +178,40 @@ def get_questionnnaire_name(questionnaire_id):
     @return: questionnaire name
     '''
     thisquestionnaire=get_object_or_404(Questionnaire,pk=questionnaire_id)
+    
     return thisquestionnaire.name
+def questionnaire_questions1(request,questionnaire_id):
+    '''
+      retrieve list of questiongroups for this questionnaire . 
+      get the form for the questionnnaire and process form data
+
+    '''
+    thisquestionnairename= get_questionnnaire_name(questionnaire_id)
+    thisquestionnaire_grouplist = get_questionnaire_groupidlist(questionnaire_id)
+#    create dynamicforms for  question groups in this quesnnaire 
+    questionnaireForm= make_question_group_form(thisquestionnairename,thisquestionnaire_grouplist)
+   
+    
+    ALL_VALID=False
+    
+    if request.method =='POST':
+        thisquestionnaireForm = questionnaireForm(request.POST, request.FILES, prefix='%s_Form' %thisquestionnairename)   
+                # retrieve each from multiple formset and validate   
+        if thisquestionnaireForm.is_valid():
+                for i in xrange(0, get_total_questionnaire_questions(thisquestionnaire_grouplist)):
+                            formdata=get_answers(form)
+                            for(question,answer) in formdata:
+                #save question and answer before redirect
+                                thisinstance= AnswerSet(user=request.user,question=question,answer=answer)
+                                thisinstance.save()
+                                ALL_VALID=True           
+    if (ALL_VALID):
+        HttpResponseRedirect(reverse
+                            ('questionapp.views.questionnairesuccess',request,kwargs={'thisquestionnairename':thisquestionnairename,}))    
+    else:
+        thisquestionnaireForm=questionnaireForm(prefix='%s_Form' %thisquestionnairename)
+        
+        
+    return render_to_response('questionform.html', 
+                                  {'thisquestionnaireForm':thisquestionnaireForm,'thisquestionnairename': thisquestionnairename,},context_instance=RequestContext(request))
 
