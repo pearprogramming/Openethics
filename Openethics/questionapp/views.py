@@ -23,22 +23,13 @@ def first_questionset(request, questiongroup_id):
     responsible for processing form for the first questions group e.g prescreening questions
     the first question group are all boolean fields
      
-    '''
-
-    
-    
-    
-    
+    '''    
     user=request.user
     questionForm = make_question_group_form(questiongroup_id)
-    
-    
-    
+  
     if request.method =='POST':  
                  
         form = questionForm(request.POST)
-        
-        
         if  form.is_valid():
             
             formdata=get_answers(form)
@@ -46,19 +37,13 @@ def first_questionset(request, questiongroup_id):
             
             for(question_id,answer) in formdata:
                 #save question and answer before redirect
-                
                 question = get_object_or_404(Question, pk=question_id) 
-                
                 thisinstance= AnswerSet(user=request.user,
                                 question=question,answer=answer)
-                
                 thisinstance.save()
-                #evaluate form fields values if any is true redirect to further questions
-                
-                
-                
-            
-            return HttpResponseRedirect(reverse('get_next_questionsgroupid', kwargs = {'order_info' : order_info}))    
+
+            order_info = 2
+            return HttpResponseRedirect(reverse('success', kwargs = {'order_info' : order_info}))    
 #            for(question,answer) in formdata:
 #                if answer == 'True' :
 #                    return HttpResponseRedirect(reverse
@@ -75,12 +60,14 @@ def first_questionset(request, questiongroup_id):
                                   {'form': questionForm,},context_instance=RequestContext(request))
    
 
+
+
 def success_view(request):
     return render_to_response('success.html') 
 
 
 
-def get_next_questionsgroupid(request,order_info,questionnaire):
+def get_next_questionsgroupid(request,order_info):
     '''
     responsible for retrieving  the next questionset to render 
     @return: the next question group id
@@ -88,46 +75,25 @@ def get_next_questionsgroupid(request,order_info,questionnaire):
     #for now lets use the First Questionnaire
     #quest1 = Questionnaire(name='Questionnaire A B C')
     order_info = int(order_info)
+    questionnaire =1
     questionnaire = int(questionnaire)  
     
-    quest2 = Questionnaire(id=questionnaire)
+    quest = Questionnaire(id=questionnaire)
     
-    #quest = Questionnaire(pk=2)
-    
-      
-    
-    #groups = quest2.questiongroup.all()
-    #print groups
-    correct_order = QuestionOrder.objects.filter(questionnaire=quest2).order_by('order_info')
+
+    correct_order = QuestionOrder.objects.filter(questionnaire=quest).order_by('order_info')
         
-        
-    #for group in correct_order:
-        #print group
-        # actual_group = group.questiongroup
-        # print actual_group.questiongroupname
-        # print actual_group.id
-        
-    #firstquestion = correct_order[0]
-        
-    #firstquestion_id = firstquestion.id
-        
-    #print firstquestion.id
+
         
     if order_info == 1:                
         #get questiongroup_id that has order_info=1 on that group
-        questiongroup_id = correct_order[0].questiongroup.id    
+        questiongroup_id = int(correct_order[0].questiongroup.id)    
         return HttpResponseRedirect(reverse('first_questionset', kwargs = {'questiongroup_id' : questiongroup_id} ))
         
         
     
-    else:    
-        
-        
-        
-        questiongroup_id = correct_order[order_info].questiongroup.id   
-        
-        
-        
+    else:           
+        questiongroup_id = correct_order[order_info].questiongroup.id        
         return HttpResponseRedirect(reverse('first_questionset', kwargs = {'questiongroup_id' : questiongroup_id} ))
 
 
@@ -138,8 +104,7 @@ def get_questionnaire(request,questionnaire_id):
     questionnaire = int(questionnaire_id)    
     
     order_info = 1
-    return HttpResponseRedirect(reverse('get_next_questiongroupid', kwargs = { 'order_info' : order_info, 'questionnaire' : questionnaire                                                          
-                                                                              } ))
+    return HttpResponseRedirect(reverse('get_next_questiongroupid', kwargs = { 'questionnaire' : questionnaire } ))
     
     
 def get_answers(self):
@@ -147,9 +112,7 @@ def get_answers(self):
     return question and answer pair tuple
     
     self.field[name].label is data for the object to be inserted to the QuestionAnswer
-    '''
-    
-    
+    '''  
     for question, answer in self.cleaned_data.items():
         print self.cleaned_data.items()
         yield (question, answer)
