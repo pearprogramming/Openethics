@@ -96,7 +96,6 @@ def questionnaire_questions(request,questionnaire_id=questionnaire_id):
                                 thisinstance.save()
                                 ALL_VALID=True
            
-    
     if (ALL_VALID):
         HttpResponseRedirect(reverse
                             ('questionapp.views.questionnairesuccess',request,kwargs={'thisquestionnairename':thisquestionnairename,}))    
@@ -107,10 +106,12 @@ def questionnaire_questions(request,questionnaire_id=questionnaire_id):
         
     return render_to_response('questionnaire.html', 
                                   {'formset':formset},{'questionnairename': thisquestionnairename},context_instance=RequestContext(request))
+
     
 def questionnairesucess(request,thisquestionnairename):
     message= 'you have sucessfully completed %s' % thisquestionnairename
     return render_to_response('questionnairesuccess.html',{'message':message}, context_instance=RequestContext(request))
+
 
 def get_next_questionsgroupid(questionnaire_id,questiongroup_id):
     '''
@@ -128,6 +129,7 @@ def get_next_questionsgroupid(questionnaire_id,questiongroup_id):
             thisgroup_id = group_id
             nextgroup_id = grouplist[(i + 1) % len(grouplist)]
             yield nextgroup_id
+
             
 def get_answers(self):
     '''
@@ -136,6 +138,7 @@ def get_answers(self):
     '''  
     for question, answer in self.cleaned_data.items():
         yield(question,answer)
+
 
 def get_total_group_questions(questiongroup_id):
     '''
@@ -147,12 +150,13 @@ def get_total_group_questions(questiongroup_id):
 
 def get_total_questionnaire_questions(groupidlist):
     '''
-    @return: total number of questions in the questionaire
+    @return: total number of questions in the questionnaire
     '''
     for groupid in groupidlist:
-      totalcount =  Questiongroup.objects.get(pk=questiongroup_id).questions.all().count() 
+      totalcount = get_total_group_questions(groupid)
       totalcount += totalcount
     return totalcount
+
 
 def get_questionnaire_groupidlist(questionnaire_id):
     '''
@@ -167,6 +171,7 @@ def get_questionnaire_groupidlist(questionnaire_id):
         thisquestionnaire_grouplist.append(group.id)
     
     return thisquestionnaire_grouplist
+
 
 def get_questionnnaire_name(questionnaire_id):
     '''
