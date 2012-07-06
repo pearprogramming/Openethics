@@ -55,9 +55,10 @@ def first_questionset(request, questiongroup_id):
                 thisinstance.save()
                 #evaluate form fields values if any is true redirect to further questions
                 
-                order_info = order_info++
+                
+                
             
-            return HttpResponseRedirect(reverse('get_next_questionsgroupid', 'order_info' : order_info))    
+            return HttpResponseRedirect(reverse('get_next_questionsgroupid', kwargs = {'order_info' : order_info}))    
 #            for(question,answer) in formdata:
 #                if answer == 'True' :
 #                    return HttpResponseRedirect(reverse
@@ -85,13 +86,26 @@ def get_next_questionsgroupid(request,order_info):
     @return: the next question group id
     '''
     #for now lets use the First Questionnaire
-    quest = Questionnaire(pk=1)
+    quest1 = Questionnaire(name='Questionnaire A B C')
+    quest2 = Questionnaire(id=2)
     
-    if order_info == '1':                
-        #this returns a Queryset of the Questiongroup in Questionnaire
-        groups = quest.questiongroup.all()
+    quest = Questionnaire(pk=2)
+    
+    order_info = int(order_info)    
+    if order_info == 1:                
+        #get questiongroup_id that has order_info=1 on that group
         
+        groups = quest2.questiongroup.all()
+        print groups
         correct_order = QuestionOrder.objects.filter(questionnaire=quest).order_by('order_info')
+        
+        for group in correct_order:
+            print group
+            actual_group = group.questiongroup
+            print actual_group.questiongroupname
+            print actual_group.id
+            
+        first = correct_order[order_info]
     
         questiongroup_id = 1
         
@@ -100,7 +114,7 @@ def get_next_questionsgroupid(request,order_info):
         
     
     else:    
-    
+        
 
         questiongroup_id = 3
         return HttpResponseRedirect(reverse('first_questionset', kwargs = {'questiongroup_id' : questiongroup_id} ))

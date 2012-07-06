@@ -79,4 +79,4 @@ class QuestionOrder(models.Model):
     order_info=models.IntegerField(max_length=3)
     
     def __unicode__(self):
-        return self.order_info
+        return 'group:%s order:%s' %(self.questiongroup, str(self.order_info))
