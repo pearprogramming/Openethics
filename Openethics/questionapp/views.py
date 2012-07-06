@@ -77,7 +77,7 @@ def questionnaire_questions(request,questionnaire_id):
     thisquestionnairename= get_questionnnaire_name(questionnaire_id)
     thisquestionnaire_grouplist = get_questionnaire_groupidlist(questionnaire_id)
 #    create dynamicforms for  question groups in this quesnnaire 
-    questionnaireForm= make_question_group_form(thisquestionnaire_grouplist)
+    questionnaireForm= make_question_group_form(thisquestionnairename,thisquestionnaire_grouplist)
     #make forsetform for each form
     QuestionnnaireFormset =formset_factory(questionnaireForm)
     

@@ -8,7 +8,7 @@ Created on Jun 26, 2012
 from django import forms
 from models import Questiongroup,Questionnaire
 from django.forms.fields import CharField,BooleanField
-from views import *
+
 
 
 
@@ -17,7 +17,7 @@ FIELD_TYPES={
             1: CharField(widget = forms.Textarea),
             2: BooleanField(initial= False)
             }
-def make_question_group_form(thisquestionnaire_grouplist):
+def make_question_group_form(thisquestionnairename,thisquestionnaire_grouplist):
     '''
      mapping questions fields  type  to form fields type 
      create form for questionnaire
@@ -25,7 +25,7 @@ def make_question_group_form(thisquestionnaire_grouplist):
     
     '''
     fields={}
-    questionnairename=get_questionnnaire_name
+    questionnairename=thisquestionnairename
 
     for questiongroups in [thisquestionnaire_grouplist]:
         thisgroupquestions = Questiongroup.objects.get(pk=questiongroup_id).questions.all()
