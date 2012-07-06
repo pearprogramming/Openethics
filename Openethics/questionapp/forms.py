@@ -7,8 +7,8 @@ Created on Jun 26, 2012
 
 from django import forms
 from models import Questiongroup,Questionnaire
-from django.forms.fields import CharField,BooleanField,TextField
-from views import get_total_questionnaire_questions,get_questionnnaire_name
+from django.forms.fields import CharField,BooleanField
+from views import *
 
 
 

@@ -68,7 +68,7 @@ def success_view(request):
 
                     
 
-def questionnaire_questions(request,questionnaire_id=questionnaire_id):
+def questionnaire_questions(request,questionnaire_id):
     '''
       retrieve list of questiongroups for this questionnaire . 
       get the form for the questionnnaire and process form data
@@ -119,17 +119,14 @@ def get_next_questionsgroupid(questionnaire_id,questiongroup_id):
     @return: the next question group id if exists else return false if list is empty
     
     '''
-    grouplist=get_questionnaire_groupidlist(questionnaire_id)
-    if not grouplist :
-        return False
-    else:            
-      cycle= True
-      while cycle:
+    grouplist=get_questionnaire_groupidlist(questionnaire_id) 
+    cycle=True
+    while cycle:
         for i, group_id in enumerate(grouplist):
-            thisgroup_id = group_id
-            nextgroup_id = grouplist[(i + 1) % len(grouplist)]
-            yield nextgroup_id
-
+               thisgroup_id = group_id
+               nextgroup_id = grouplist[(i + 1) % len(grouplist)]
+               yield nextgroup_id
+   
             
 def get_answers(self):
     '''
