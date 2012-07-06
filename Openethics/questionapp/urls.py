@@ -14,11 +14,11 @@ urlpatterns = patterns('questionapp.views',
         
         url(r'^get/(?P<order_info>\d+)/$', 
             view = 'get_next_questionsgroupid',
-            name = 'get_next_questionsgroupid'),
+            name = 'get_questionsgroupid'),
         
         url(r'^qs/(?P<questionnaire_id>\d+)/$', 
             view = 'get_questionnaire',
-            name = 'get_questionnaire'),                   
+            name = 'get_questionnaire_id'),                   
     
     
 )

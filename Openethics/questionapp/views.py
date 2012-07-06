@@ -43,7 +43,7 @@ def first_questionset(request, questiongroup_id):
                 thisinstance.save()
 
             order_info = 2
-            return HttpResponseRedirect(reverse('success', kwargs = {'order_info' : order_info}))    
+            return HttpResponseRedirect(reverse('get_questionsgroupid', kwargs = {'order_info' : order_info}))    
 #            for(question,answer) in formdata:
 #                if answer == 'True' :
 #                    return HttpResponseRedirect(reverse
@@ -75,7 +75,7 @@ def get_next_questionsgroupid(request,order_info):
     #for now lets use the First Questionnaire
     #quest1 = Questionnaire(name='Questionnaire A B C')
     order_info = int(order_info)
-    questionnaire =1
+    questionnaire =3
     questionnaire = int(questionnaire)  
     
     quest = Questionnaire(id=questionnaire)
@@ -88,13 +88,15 @@ def get_next_questionsgroupid(request,order_info):
     if order_info == 1:                
         #get questiongroup_id that has order_info=1 on that group
         questiongroup_id = int(correct_order[0].questiongroup.id)    
-        return HttpResponseRedirect(reverse('first_questionset', kwargs = {'questiongroup_id' : questiongroup_id} ))
+        
+        return HttpResponseRedirect(reverse('first_questionset',  kwargs = {'questiongroup_id' : questiongroup_id} ))
         
         
     
-    else:           
+    else:
+        order_info = order_info - 1           
         questiongroup_id = correct_order[order_info].questiongroup.id        
-        return HttpResponseRedirect(reverse('first_questionset', kwargs = {'questiongroup_id' : questiongroup_id} ))
+        return HttpResponseRedirect(reverse('first_questionset',  kwargs = {'questiongroup_id' : questiongroup_id} ))
 
 
 def get_questionnaire(request,questionnaire_id):
