@@ -94,8 +94,7 @@ def questionnaire_questions(request,questionnaire_id):
                 #save question and answer before redirect
                                 thisinstance= AnswerSet(user=request.user,question=question,answer=answer)
                                 thisinstance.save()
-                                ALL_VALID=True
-           
+                                ALL_VALID=True           
     if (ALL_VALID):
         HttpResponseRedirect(reverse
                             ('questionapp.views.questionnairesuccess',request,kwargs={'thisquestionnairename':thisquestionnairename,}))    
@@ -110,7 +109,7 @@ def questionnaire_questions(request,questionnaire_id):
     
 def questionnairesucess(request,thisquestionnairename):
     message= 'you have sucessfully completed %s' % thisquestionnairename
-    return render_to_response('questionnairesuccess.html',{'message':message}, context_instance=RequestContext(request))
+    return render_to_response('questionnairesuccess.html',{'message':message,'questionnairename':thisquestionnairename}, context_instance=RequestContext(request))
 
 
 def get_next_questionsgroupid(questionnaire_id,questiongroup_id):
