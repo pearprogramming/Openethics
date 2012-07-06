@@ -7,7 +7,7 @@
 {% endif %}
 <form method="post" action=".">
 	<title> questionForm</title>
-	<h2>Question Form</h2> 
+	<h2>{{thisquestionnairename}}</h2> 
 {%csrf_token %}
 
 {{ form.as_p }}

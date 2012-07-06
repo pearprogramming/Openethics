@@ -74,6 +74,7 @@ def success_view(request):
 
 def questionnaire_questions(request,questionnaire_id):
     '''
+      using formset
       retrieve list of questiongroups for this questionnaire . 
       get the form for the questionnnaire and process form data
 
@@ -180,11 +181,12 @@ def get_questionnnaire_name(questionnaire_id):
     thisquestionnaire=get_object_or_404(Questionnaire,pk=questionnaire_id)
     
     return thisquestionnaire.name
+
 def questionnaire_questions1(request,questionnaire_id):
     '''
       retrieve list of questiongroups for this questionnaire . 
       get the form for the questionnnaire and process form data
-
+     using baseform
     '''
     thisquestionnairename= get_questionnnaire_name(questionnaire_id)
     thisquestionnaire_grouplist = get_questionnaire_groupidlist(questionnaire_id)
@@ -213,5 +215,5 @@ def questionnaire_questions1(request,questionnaire_id):
         
         
     return render_to_response('questionform.html', 
-                                  {'thisquestionnaireForm':thisquestionnaireForm,'thisquestionnairename': thisquestionnairename,},context_instance=RequestContext(request))
+                                  {'form':thisquestionnaireForm,'thisquestionnairename': thisquestionnairename,},context_instance=RequestContext(request))
 
