@@ -24,19 +24,8 @@ def first_questionset(request, questiongroup_id):
     the first question group are all boolean fields
      
     '''
-    #this variable sets the first page of the question!
+
     
-    
-    #Q_order = QuestionOrder.objects.get(questiongroup=1)
-    #print Q_order.order_info
-    
-   
-    
-    
-    
-    #This need to be fixed, the first questiongroup id should be the one that is being accessed from the 
-    #first item in Questionnaire list
-    questiongroup_id=1
     
     
     
@@ -66,7 +55,9 @@ def first_questionset(request, questiongroup_id):
                 thisinstance.save()
                 #evaluate form fields values if any is true redirect to further questions
                 
-            return HttpResponseRedirect(reverse('questionapp_success'))    
+                order_info = order_info++
+            
+            return HttpResponseRedirect(reverse('get_next_questionsgroupid', 'order_info' : order_info))    
 #            for(question,answer) in formdata:
 #                if answer == 'True' :
 #                    return HttpResponseRedirect(reverse
@@ -87,27 +78,47 @@ def success_view(request):
     return render_to_response('success.html') 
 
 
-#def get_next_questionsgroupid(request,order_info):
- #   '''
-  #  responsible for retrieving  the next questionset to render 
-  #  @return: the next question group id
-   # '''
-   # if order_info == 1:
-        #move to the first_questionset view!
-   #     return HttpResponseRedirect(reverse('first_questionset', context = order_info ))
-        #else count all question group inside a questionnaire
-   #     
-    
-    #else:    
-    
-     #   Q_count = QuestionOrder.objects.count()
-      #  print Q_count
 
-      #  order_info = 1
+def get_next_questionsgroupid(request,order_info):
+    '''
+    responsible for retrieving  the next questionset to render 
+    @return: the next question group id
+    '''
+    #for now lets use the First Questionnaire
+    quest = Questionnaire(pk=1)
+    
+    if order_info == '1':                
+        #this returns a Queryset of the Questiongroup in Questionnaire
+        groups = quest.questiongroup.all()
         
-      #  return HttpResponseRedirect(reverse('first_questionset', context = order_info ))
-#
+        correct_order = QuestionOrder.objects.filter(questionnaire=quest).order_by('order_info')
+        
+        
 
+        
+        questiongroup_id = 1
+        
+        return HttpResponseRedirect(reverse('first_questionset', kwargs = {'questiongroup_id' : questiongroup_id} ))
+        #else count all question group inside a questionnaire
+        
+    
+    else:    
+    
+
+        questiongroup_id = 3
+        return HttpResponseRedirect(reverse('first_questionset', kwargs = {'questiongroup_id' : questiongroup_id} ))
+
+
+def get_questionnaire_name(request,questionnaire_name):
+    '''
+    responsible in calling the questionnaire name
+    '''
+    questionnaire_name = Questionnaire(name=questionnaire_name)
+    order_info = 1
+    return HttpResponseRedirect(reverse('questionapp.views.get_next_questiongroupid', kwargs = {'questionnaire_name' : questionnaire_name,
+                                                                              'order_info' : order_info
+                                                                              } ))
+    
     
 def get_answers(self):
     '''
