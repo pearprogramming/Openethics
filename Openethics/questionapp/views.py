@@ -88,7 +88,7 @@ def questionnaire_questions(request,questionnaire_id=questionnaire_id):
                 # retrieve each from multiple formset and validate   
         for form in [formset]:
             if form.is_valid():
-                for i in xrange(0, get_total_questionnaire_questions(thisquestionnaire)):
+                for i in xrange(0, get_total_questionnaire_questions(thisquestionnaire_grouplist)):
                             formdata=get_answers(form)
                             for(question,answer) in formdata:
                 #save question and answer before redirect
