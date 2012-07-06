@@ -17,7 +17,7 @@ class Questiongroup(models.Model):
     class Meta():
         db_table ='questiongroup'
         verbose_name_plural='Questiongroups'
-    questiongroupnamex = models.CharField('question group name',max_length=255,unique=True)
+    questiongroupname = models.CharField('question group name',max_length=255,unique=True)
     
     def __unicode__(self):
         return self.questiongroupname
@@ -66,7 +66,7 @@ class Questionnaire(models.Model):
     '''
     class Meta():
         db_table='questionnaire'
-        verbose
+        verbose_name_plural='questionnaires'
     name=models.CharField(max_length=250)
     questiongroups=models.ManyToManyField(Questiongroup,through='Questionnaire_Questiongroup')   
     

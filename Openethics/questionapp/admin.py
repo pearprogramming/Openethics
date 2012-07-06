@@ -22,7 +22,7 @@ class QuestiongroupAdmin(admin.ModelAdmin):
 
 
 class QuestionnaireInline(admin.TabularInline):
-    model = Questionnaire.questiongroup.through
+    model = Questionnaire.questiongroups.through
     
 class QuestionnaireAdmin(admin.ModelAdmin):
     inlines = [
