@@ -4,7 +4,7 @@ from questionapp.views import *
 
 urlpatterns = patterns('questionapp.views',
         
-        url(r'^first/$', 
+        url(r'^first/(?P<questiongroup_id>\d+)$', 
             view = 'first_questionset',
             name = 'first_questionset'),
         
@@ -16,9 +16,9 @@ urlpatterns = patterns('questionapp.views',
             view = 'get_next_questionsgroupid',
             name = 'get_next_questionsgroupid'),
         
-        url(r'^qs/(?P<questionnaire_name>\d+)$', 
-            view = 'get_questionnaire_name',
-            name = 'get_questionnaire_name'),                   
+        url(r'^qs/(?P<questionnaire_name_id>\d+)$', 
+            view = 'get_questionnaire',
+            name = 'get_questionnaire'),                   
     
     
 )

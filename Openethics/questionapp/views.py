@@ -86,47 +86,56 @@ def get_next_questionsgroupid(request,order_info):
     @return: the next question group id
     '''
     #for now lets use the First Questionnaire
-    quest1 = Questionnaire(name='Questionnaire A B C')
+    #quest1 = Questionnaire(name='Questionnaire A B C')
     quest2 = Questionnaire(id=2)
     
     quest = Questionnaire(pk=2)
     
     order_info = int(order_info)    
+    
+    groups = quest2.questiongroup.all()
+    print groups
+    correct_order = QuestionOrder.objects.filter(questionnaire=quest2).order_by('order_info')
+        
+        
+    for group in correct_order:
+        print group
+        actual_group = group.questiongroup
+        print actual_group.questiongroupname
+        print actual_group.id
+        
+    #firstquestion = correct_order[0]
+        
+    #firstquestion_id = firstquestion.id
+        
+    #print firstquestion.id
+        
     if order_info == 1:                
         #get questiongroup_id that has order_info=1 on that group
-        
-        groups = quest2.questiongroup.all()
-        print groups
-        correct_order = QuestionOrder.objects.filter(questionnaire=quest).order_by('order_info')
-        
-        for group in correct_order:
-            print group
-            actual_group = group.questiongroup
-            print actual_group.questiongroupname
-            print actual_group.id
-            
-        first = correct_order[order_info]
-    
-        questiongroup_id = 1
-        
+        questiongroup_id = correct_order[0].questiongroup.id    
         return HttpResponseRedirect(reverse('first_questionset', kwargs = {'questiongroup_id' : questiongroup_id} ))
-        #else count all question group inside a questionnaire
+        
         
     
     else:    
         
-
-        questiongroup_id = 3
+        
+        
+        questiongroup_id = correct_order[order_info].questiongroup.id   
+        
         return HttpResponseRedirect(reverse('first_questionset', kwargs = {'questiongroup_id' : questiongroup_id} ))
 
 
-def get_questionnaire_name(request,questionnaire_name):
+def get_questionnaire(request,questionnaire_name_id):
     '''
-    responsible in calling the questionnaire name
+    responsible in calling the questionnaire name, and giving the first one!        
     '''
-    questionnaire_name = Questionnaire(name=questionnaire_name)
+    
+    
+    questionnaire_object = Questionnaire(questionnaire_name_id)
+    
     order_info = 1
-    return HttpResponseRedirect(reverse('questionapp.views.get_next_questiongroupid', kwargs = {'questionnaire_name' : questionnaire_name,
+    return HttpResponseRedirect(reverse('questionapp.views.get_next_questiongroupid', kwargs = {'questionnaire_object' : questionnaire_object,
                                                                               'order_info' : order_info
                                                                               } ))
     
