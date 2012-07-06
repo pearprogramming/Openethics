@@ -67,7 +67,9 @@ class Questionnaire(models.Model):
         db_table='questionnaire'
     name=models.CharField(max_length=250)
     questiongroups=models.ManyToManyField(Questiongroup,through='Questionnaire_Questiongroup')   
-
+    
+    def __unicode__(self):
+            return self.name
 class Questionnaire_Questiongroup(models.Model):
     '''
     define the association betwen Questionaire and Questiongroup 
