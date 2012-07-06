@@ -27,7 +27,7 @@ def make_question_group_form(thisquestionnairename,thisquestionnaire_grouplist):
     fields={}
     questionnairename=thisquestionnairename
 
-    for questiongroups in [thisquestionnaire_grouplist]:
+    for questiongroup_id in thisquestionnaire_grouplist:
         thisgroupquestions = Questiongroup.objects.get(pk=questiongroup_id).questions.all()
         
         for question in thisgroupquestions:
@@ -36,7 +36,7 @@ def make_question_group_form(thisquestionnairename,thisquestionnaire_grouplist):
 #       field.label = question.label
 #        fields[str(question.id)]= field
         
-    return type('%s Form'% questionnairename,(forms.BaseForm,),{'base_fields':fields})
+    return type('%s Form' % str(questionnairename),(forms.BaseForm,),{'base_fields':fields})
 
 
             

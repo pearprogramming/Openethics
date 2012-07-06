@@ -13,6 +13,10 @@ from django.core.urlresolvers import reverse
 from django.template import  RequestContext
 from django.contrib.auth.models import  User
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required
+from django.forms.formsets import formset_factory
+from django.forms.models import modelformset_factory
+from django.forms.models import BaseModelFormSet
 from questionapp.forms import *
 
 @login_required
@@ -163,8 +167,8 @@ def get_questionnaire_groupidlist(questionnaire_id):
     thisquestionnaire_groups=thisquestionnaire.questiongroups.all()
     thisquestionnaire_grouplist=[]
  
-    for qroup in list(thisquestionnaire_groups):
-        thisquestionnaire_grouplist.append(group.id)
+    for questionqroup in list(thisquestionnaire_groups):
+        thisquestionnaire_grouplist.append(questionqroup.id)
     
     return thisquestionnaire_grouplist
 
