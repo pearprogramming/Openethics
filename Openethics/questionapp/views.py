@@ -83,7 +83,7 @@ def questionnaire_questions(request,questionnaire_id):
 #    create dynamicforms for  question groups in this quesnnaire 
     questionnaireForm= make_question_group_form(thisquestionnairename,thisquestionnaire_grouplist)
     #make forsetform for each form
-    QuestionnnaireFormset =formset_factory(questionnaireForm)
+    QuestionnaireFormset =formset_factory(questionnaireForm)
     
     ALL_VALID=False
     
@@ -105,10 +105,10 @@ def questionnaire_questions(request,questionnaire_id):
     else:
         formset = QuestionnaireFormset()
         for  form in [formset]:
-            formset = QuestionsFormset( prefix='%s_Form' %thisquestionnairename)
+            formset = QuestionnaireFormset( prefix='%s_Form' %thisquestionnairename)
         
-    return render_to_response('questionnaire.html', 
-                                  {'formset':formset},{'questionnairename': thisquestionnairename},context_instance=RequestContext(request))
+    return render_to_response('questionnaireform.html', 
+                                  {'formset':formset,'questionnairename': thisquestionnairename,},context_instance=RequestContext(request))
 
     
 def questionnairesucess(request,thisquestionnairename):

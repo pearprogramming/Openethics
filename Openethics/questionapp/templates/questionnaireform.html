@@ -2,11 +2,18 @@
     <p class="error">please, that's enter valid input</p>
 {% endif %}
 <form method="post" action="">
+	 <title> questionnaireForm</title>
+	 {% if questionnairename %}
+
+    
+    <h2>{{questionnairename}}</h2> 
+  
+
+{% endif %}
+
     {{ formset.management_form }}
     {% for form in  formset.forms %}
-      <title> questionnaireForm</title>
-	<h2>{{thisquestionairename}}</h2> 
-    
+     
       {%csrf_token %}
 
        {{ form.as_p }}
