@@ -7,6 +7,7 @@ urlpatterns = patterns('questionapp.views',
         url(r'^first/$', 
             view = 'first_questionset',
             name = 'first_questionset'),
+        url(r'^questionnaire/$',view='questionnaire_questions',name='questionnaire_questions') ,           
         
         url(r'^success/$', 
             view = 'success_view',

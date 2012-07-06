@@ -36,7 +36,7 @@ urlpatterns = patterns('',
       ('^quest/', include('questionapp.urls')),
       
 
-    
+
 
 
 
