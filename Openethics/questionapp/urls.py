@@ -14,6 +14,5 @@ urlpatterns = patterns('questionapp.views',
         url(r'^success/$', 
             view = 'success_view',
             name = 'questionapp_success'),               
-    
 )
 
