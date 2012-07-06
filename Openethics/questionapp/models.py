@@ -31,7 +31,7 @@ class Question(models.Model):
     '''
     class Meta():
         db_table ='question'
-        
+#        order_with_respect_to = 'questiongroup'
     
     label=models.CharField('question',max_length=255)
     field_type=models.IntegerField(choices=FIELD_TYPE_CHOICES)
