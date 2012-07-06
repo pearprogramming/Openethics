@@ -16,6 +16,7 @@ class Questiongroup(models.Model):
     '''
     class Meta():
         db_table ='questiongroup'
+        verbose_name_plural='Questiongroups'
     questiongroupnamex = models.CharField('question group name',max_length=255,unique=True)
     
     def __unicode__(self):
@@ -34,7 +35,7 @@ class Question(models.Model):
     label=models.CharField('question',max_length=255)
     field_type=models.IntegerField(choices=FIELD_TYPE_CHOICES)
     questiongroup=models.ForeignKey(Questiongroup,related_name='questions')
-    #value=models.CharField(max_length=255)
+   
     def __unicode__(self):
         return self.label
     
@@ -65,6 +66,7 @@ class Questionnaire(models.Model):
     '''
     class Meta():
         db_table='questionnaire'
+        verbose
     name=models.CharField(max_length=250)
     questiongroups=models.ManyToManyField(Questiongroup,through='Questionnaire_Questiongroup')   
     
