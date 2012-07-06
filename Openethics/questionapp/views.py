@@ -92,10 +92,7 @@ def get_next_questionsgroupid(request,order_info):
         groups = quest.questiongroup.all()
         
         correct_order = QuestionOrder.objects.filter(questionnaire=quest).order_by('order_info')
-        
-        
-
-        
+    
         questiongroup_id = 1
         
         return HttpResponseRedirect(reverse('first_questionset', kwargs = {'questiongroup_id' : questiongroup_id} ))
