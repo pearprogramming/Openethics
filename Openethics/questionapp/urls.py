@@ -12,11 +12,11 @@ urlpatterns = patterns('questionapp.views',
             view = 'success_view',
             name = 'questionapp_success'),               
         
-        url(r'^get/(?P<order_info>\d+)$', 
+        url(r'^get/(?P<order_info>\d+)/(?P<questionnaire>\d+)/$', 
             view = 'get_next_questionsgroupid',
             name = 'get_next_questionsgroupid'),
         
-        url(r'^qs/(?P<questionnaire_name_id>\d+)$', 
+        url(r'^qs/(?P<questionnaire_id>\d+)$', 
             view = 'get_questionnaire',
             name = 'get_questionnaire'),                   
     

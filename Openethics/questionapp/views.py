@@ -80,29 +80,32 @@ def success_view(request):
 
 
 
-def get_next_questionsgroupid(request,order_info):
+def get_next_questionsgroupid(request,order_info,questionnaire):
     '''
     responsible for retrieving  the next questionset to render 
     @return: the next question group id
     '''
     #for now lets use the First Questionnaire
     #quest1 = Questionnaire(name='Questionnaire A B C')
-    quest2 = Questionnaire(id=2)
+    order_info = int(order_info)
+    questionnaire = int(questionnaire)  
     
-    quest = Questionnaire(pk=2)
+    quest2 = Questionnaire(id=questionnaire)
     
-    order_info = int(order_info)    
+    #quest = Questionnaire(pk=2)
     
-    groups = quest2.questiongroup.all()
-    print groups
+      
+    
+    #groups = quest2.questiongroup.all()
+    #print groups
     correct_order = QuestionOrder.objects.filter(questionnaire=quest2).order_by('order_info')
         
         
-    for group in correct_order:
-        print group
-        actual_group = group.questiongroup
-        print actual_group.questiongroupname
-        print actual_group.id
+    #for group in correct_order:
+        #print group
+        # actual_group = group.questiongroup
+        # print actual_group.questiongroupname
+        # print actual_group.id
         
     #firstquestion = correct_order[0]
         
@@ -123,20 +126,19 @@ def get_next_questionsgroupid(request,order_info):
         
         questiongroup_id = correct_order[order_info].questiongroup.id   
         
+        
+        
         return HttpResponseRedirect(reverse('first_questionset', kwargs = {'questiongroup_id' : questiongroup_id} ))
 
 
-def get_questionnaire(request,questionnaire_name_id):
+def get_questionnaire(request,questionnaire_id):
     '''
-    responsible in calling the questionnaire name, and giving the first one!        
+    responsible in calling the questionnaire name, and giving the first question in order = 1!        
     '''
-    
-    
-    questionnaire_object = Questionnaire(questionnaire_name_id)
+    questionnaire = int(questionnaire_id)    
     
     order_info = 1
-    return HttpResponseRedirect(reverse('questionapp.views.get_next_questiongroupid', kwargs = {'questionnaire_object' : questionnaire_object,
-                                                                              'order_info' : order_info
+    return HttpResponseRedirect(reverse('get_next_questiongroupid', kwargs = { 'order_info' : order_info, 'questionnaire' : questionnaire                                                          
                                                                               } ))
     
     
@@ -154,38 +156,6 @@ def get_answers(self):
         
 
 
-
-
-
-
-
-def other_questionset(request,questiongroup_id):
-    '''
-    view  for processing form for other questionsgroups 
-    save the instance and redirect to next question groups
-    
-    '''
-    
-    
-    user=request.user
-    
-    questionForm = make_question_group_form(questiongroup_id=questiongroup_id)
-    if request.method =='POST':  
-        form = questionForm(request.POST)
-        if  form.is_valid():
-            formdata=get_answers(form)
-            for(question,answer) in formdata:
-                #save question and answer before redirect
-                thisinstance= AnswerSet(user=request.user,questiongroup_id=questiongroup_id,
-                                question=question,answer=answer,status=0)
-                thisinstance.save()
-        return HttpResponseRedirect(reverse
-                            ('questionapp.views.success',request, 
-                                 kwargs={'username': request.user.username}))
-    else:
-        return render_to_response('questionform.html', 
-                                  {'form': questionForm,},context_instance=RequestContext(request))
-                
 
 
 
