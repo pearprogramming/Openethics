@@ -95,7 +95,7 @@ class Questionnaire(models.Model):
         
         return next_order_info
     def get_ordered_groups(self):
-        return QuestionOrder.objects.filter(questionnaire=self).order_by('order_info')
+        return [order.questiongroup for order in QuestionOrder.objects.filter(questionnaire=self).order_by('order_info') ]
     def __unicode__(self):
         return self.name
     
