@@ -28,9 +28,12 @@ def first_questionset(request, questiongroup_id):
     user=request.user
     
     questionForm = make_question_group_form(questiongroup_id)
+
     
     if request.method =='POST':  
-          
+        print user
+        
+        
         form = questionForm(request.POST)
         if  form.is_valid():
             
@@ -39,9 +42,7 @@ def first_questionset(request, questiongroup_id):
             
             for(question_id,answer) in formdata:
                 #save question and answer before redirect
-                print question_id
-                
-                print answer
+
                 
                 question = get_object_or_404(Question, pk=question_id) 
                 thisinstance= AnswerSet(user=request.user,
