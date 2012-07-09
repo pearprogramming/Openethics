@@ -4,11 +4,11 @@ Created on Jun 26, 2012
 @author: ayoola_al
 '''
 from django.db import models
-from django.forms import forms
+
 
 from django.contrib.auth.models import User
-from datetime import datetime
- 
+
+
 class Questiongroup(models.Model):
     '''
     reponsible for question groups ,each group set can have one to  many set of questions 
@@ -59,7 +59,8 @@ class AnswerSet(models.Model):
     
     def save(self, *args, **kwargs):                       
         super(AnswerSet, self).save(*args, **kwargs)
-        
+
+         
 class Questionnaire(models.Model):
     '''
     This class stores the list of order set
@@ -67,6 +68,34 @@ class Questionnaire(models.Model):
     name=models.CharField(max_length=250)
     questiongroup=models.ManyToManyField(Questiongroup, through='QuestionOrder')
     
+
+    
+    def add_question_group(self, group):
+        """
+            Adds the group passed in to the end of the ordered list of questiongroups.
+            
+            @param group: The QuestionGroup object to be added to the end of the list of question
+            groups
+            @return: integer representing the added groups order in the list
+        """
+        
+        #get the current QuestionOrder's, and get the order_info for the last in the list
+        questionGroupOrder = QuestionOrder.objects.filter(questionnaire=self).order_by('-order_info')
+        
+        if len(questionGroupOrder) > 0:
+            next_order_info = questionGroupOrder[0].order_info +1
+        else:
+            next_order_info = 1
+        
+        #create a new QuestionOrder object, incrementing the last order by one.
+
+        new_association = QuestionOrder(questiongroup=group, 
+                                        questionnaire=self, order_info=next_order_info)
+        new_association.save()
+        
+        return next_order_info
+    def get_ordered_groups(self):
+        return QuestionOrder.objects.filter(questionnaire=self).order_by('order_info')
     def __unicode__(self):
         return self.name
     
@@ -80,3 +109,6 @@ class QuestionOrder(models.Model):
     
     def __unicode__(self):
         return 'group:%s order:%s' %(self.questiongroup, str(self.order_info))
+
+
+        
