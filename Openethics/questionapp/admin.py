@@ -7,9 +7,11 @@ from django.contrib import admin
 from questionapp.models import *
  
 class QuestionAdmin(admin.ModelAdmin):
-    list_display=('label','field_type')
+    list_display=('label','field_type','optionanswer')
     
-
+class OptionAnswerAdmin(admin.ModelAdmin):
+     
+    list_display=('option',)  
     
 class AnswerSetAdmin(admin.ModelAdmin):
     list_display=('user','question','answer')
@@ -33,8 +35,7 @@ class QuestionnaireAdmin(admin.ModelAdmin):
 class QuestionOrderAdmin(admin.ModelAdmin):
     list_display = ('questiongroup','questionnaire','order_info')
     
-    
-
+admin.site.register(OptionAnswer,OptionAnswerAdmin)
 admin.site.register(Question,QuestionAdmin)
 admin.site.register(AnswerSet,AnswerSetAdmin)
 admin.site.register(Questiongroup,QuestiongroupAdmin)
