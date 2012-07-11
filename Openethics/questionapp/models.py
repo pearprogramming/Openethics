@@ -22,17 +22,6 @@ class Questiongroup(models.Model):
         return self.questiongroupname
 
 
-
-class OptionAnswer(models.Model):
-    class Meta():
-        db_table ='OptionAnswer'
-        
-    option=models.CharField(max_length=100)
-    
-    def __unicode__(self):
-          return self.option     
-
-
 FIELD_TYPE_CHOICES=((0,'charfield'),(1,'textfield'),(2,'boolean'),(3,'select'),)  
   
 class Question(models.Model):
@@ -46,16 +35,24 @@ class Question(models.Model):
     label=models.CharField('question',max_length=255)
     field_type=models.IntegerField(choices=FIELD_TYPE_CHOICES)
     questiongroup=models.ForeignKey(Questiongroup,related_name='questions')
-    optionanswer= models.ForeignKey(OptionAnswer,related_name='optionanswers')
-    
+    #optionanswer= models.ForeignKey(OptionAnswer,related_name='optionanswers')
+    optionanswer=models.CharField(max_length=100)
     #value=models.CharField(max_length=255)
     def __unicode__(self):
         return self.label
+    def save(self,*args,**kwgs):
+        if not self.id:
+          
+          if self.field_type == 3: 
+            self.optionanswer = [self.optionanswer]
+            
+          else: 
+            self.optionanswer =''
+        super(Question,self).save(*args,**kwgs)
     
 STATUS_TYPES =((0,'completed'),(1,'referred'),(2,'awaiting'),)
 
-
-
+ 
 class AnswerSet(models.Model):
     '''
     this class datamodel for storing users questions and answer 

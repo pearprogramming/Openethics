@@ -33,9 +33,12 @@ class QuestionnaireAdmin(admin.ModelAdmin):
     exclude = ('questiongroup',)
     
 class QuestionOrderAdmin(admin.ModelAdmin):
-    list_display = ('questiongroup','questionnaire','order_info')
+    list_display = ('questiongroup','questionnaire','order_info') 
+#class SelectOptionAdmin(admin.ModelAdmin):
+#    list_display = ('optionanswer',)
     
-admin.site.register(OptionAnswer,OptionAnswerAdmin)
+#admin.site.register(SelectOption,SelectOptionAdmin)
+#admin.site.register(OptionAnswer,OptionAnswerAdmin)
 admin.site.register(Question,QuestionAdmin)
 admin.site.register(AnswerSet,AnswerSetAdmin)
 admin.site.register(Questiongroup,QuestiongroupAdmin)
