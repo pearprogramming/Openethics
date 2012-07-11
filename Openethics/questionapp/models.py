@@ -35,9 +35,8 @@ class Question(models.Model):
     label=models.CharField('question',max_length=255)
     field_type=models.IntegerField(choices=FIELD_TYPE_CHOICES)
     questiongroup=models.ForeignKey(Questiongroup,related_name='questions')
-    #optionanswer= models.ForeignKey(OptionAnswer,related_name='optionanswers')
-    optionanswer=models.CharField(max_length=100)
-    #value=models.CharField(max_length=255)
+    optionanswer=models.CharField(max_length=100,blank=True,help_text='enter options for field type select ,each option seperated by comma e.g No , Yes,Not applicable')
+    
     def __unicode__(self):
         return self.label
     def save(self,*args,**kwgs):
