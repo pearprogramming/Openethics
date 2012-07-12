@@ -106,7 +106,7 @@ def get_questionnaire(request,questionnaire_id):
     order_info = 1
     return HttpResponseRedirect(reverse('get_questionsgroupid', kwargs = { 'order_info' : order_info , 'questionnaire' : questionnaire  } ))
     
-    
+
 def get_answers(self):
     '''
     return question and answer pair tuple
@@ -114,7 +114,7 @@ def get_answers(self):
     self.field[name].label is data for the object to be inserted to the QuestionAnswer
     '''  
     for question, answer in self.cleaned_data.items():
-        print self.cleaned_data.items()
+        self.cleaned_data.items()
         yield (question, answer)
         
 

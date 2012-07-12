@@ -11,6 +11,9 @@ from datetime import datetime
 
 
 class CustomListField(models.TextField):
+    '''
+    for creating  custom list field 
+    '''
     __metaclass__ = models.SubfieldBase
 
     def __init__(self, *args, **kwargs):
@@ -26,7 +29,7 @@ class CustomListField(models.TextField):
             return value
         return value.split(self.token)
 
-    def get_db_prep_value(self, value,connection,prepared=False):
+    def get_db_prep_value(self, value,connection=None,prepared=False):
         if not value: return
         assert(isinstance(value, list) or isinstance(value, tuple))
         return self.token.join([unicode(s) for s in value])
@@ -87,7 +90,6 @@ class AnswerSet(models.Model):
     user=models.ForeignKey(User)
     question=models.ForeignKey(Question)
     answer=models.CharField(max_length=250)
-    
     
     def save(self, *args, **kwargs):                       
         super(AnswerSet, self).save(*args, **kwargs)
