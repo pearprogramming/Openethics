@@ -6,7 +6,7 @@ Created on Jun 26, 2012
 '''
 
 from django import forms
-from models import Questiongroup
+from models import QuestionGroup
 from django.forms.fields import CharField,BooleanField,ChoiceField
 
 
@@ -36,6 +36,8 @@ FIELD_TYPES={
             'booleanfield': generate_boolean_field,
             'selectfield':generate_selectfield_field,
             }
+
+
 def make_question_group_form(questiongroup_id):
     '''
      mapping questions fields  type  to form fields type 
@@ -43,7 +45,7 @@ def make_question_group_form(questiongroup_id):
     
     '''
     fields={}
-    thisgroupquestions = Questiongroup.objects.get(id=questiongroup_id).questions.all()
+    thisgroupquestions = QuestionGroup.objects.get(id=questiongroup_id).questions.all()
     
     for question in thisgroupquestions:
         if question.field_type == 'selectfield':

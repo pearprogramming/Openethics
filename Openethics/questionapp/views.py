@@ -3,20 +3,18 @@ Created on Jun 26, 2012
 
 @author: ayoola_al
 '''
-from django.shortcuts import get_object_or_404
-from models import *
-from forms import make_question_group_form
 from django.http import HttpResponseRedirect
-from django.shortcuts import render_to_response
-from django.forms import forms
 from django.core.urlresolvers import reverse
+from models import QuestionGroup_order, Questionnaire
 from django.template import  RequestContext
-from django.contrib.auth.models import  User
-from django.contrib.auth.decorators import login_required
-from questionapp.forms import *
+from django.shortcuts import render_to_response
+from forms import make_question_group_form
+
+def index (request):
+    return HttpResponseRedirect(reverse('index'))
 
 
-@login_required
+
 def get_next_questiongroup(request,questionnaire_id,order_info=None):
     questionnaire_id = int(questionnaire_id)
     if order_info==None:
