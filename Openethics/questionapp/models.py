@@ -12,7 +12,7 @@ from datetime import datetime
 
 class CustomListField(models.TextField):
     '''
-    for creating  custom list field 
+    for creating  custom list field overwrite some model.fields methods
     '''
     __metaclass__ = models.SubfieldBase
 

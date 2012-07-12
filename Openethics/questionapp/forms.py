@@ -12,8 +12,8 @@ from django.forms.fields import CharField,BooleanField,ChoiceField
 
 
 
-def get_choices(thisquestion=question):
-     choices_list=thisquestion.selectoptions
+def get_choices(question):
+     choices_list=question.selectoptions
      choices= [(x,x) for x in choices_list]
      return choices
 
@@ -27,7 +27,7 @@ def generate_boolean_field():
     return BooleanField(initial= False)
 
 def generate_selectfield_field():
-    return ChoiceField(choices=get_choices())
+    return ChoiceField(choices=[])
     
 
 FIELD_TYPES={
@@ -47,11 +47,15 @@ def make_question_group_form(questiongroup_id):
     
     for question in thisgroupquestions:
         if question.field_type == 'selectfield':
-           choices=question.selectoptions 
-            
-        field = FIELD_TYPES[question.field_type]()
-        field.label = question.label
-        fields[str(question.id)]= field
+           tempfield=FIELD_TYPES[question.field_type]()
+           tempfield.choices=get_choices(question)
+           field=tempfield
+           field.label = question.label
+           fields[str(question.id)]= field
+        else:    
+            field = FIELD_TYPES[question.field_type]()
+            field.label = question.label
+            fields[str(question.id)]= field
         
     return type('QuestionForm',(forms.BaseForm,),{'base_fields':fields})
 
