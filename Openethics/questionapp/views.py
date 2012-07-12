@@ -17,96 +17,55 @@ from questionapp.forms import *
 
 
 @login_required
-def first_questionset(request, questiongroup_id):
+def get_next_questiongroup(request,questionnaire_id,order_info=None):
+    questionnaire_id = int(questionnaire_id)
+    if order_info==None:
+        order_info = 1
+
+    else:
+        order_info = int(order_info)
+        
+    quest = Questionnaire.objects.get(pk=questionnaire_id)
+    orderedgroups = quest.get_ordered_groups()
     
-    '''
-    responsible for processing form for the first questions group e.g prescreening questions
-    the first question group are all boolean fields
-     
-    '''    
-    
-    user=request.user
+    #below prints the questiongroup id! so it can be used to render a group!
+    questiongroup_id = orderedgroups[order_info-1].questiongroup.id    
     
     questionForm = make_question_group_form(questiongroup_id)
-
     
-    if request.method =='POST':  
-        print user
+    
+    
+    
+    if request.method =='POST':
+    
         
-        
-        form = questionForm(request.POST)
-        if  form.is_valid():
+        if order_info == orderedgroups.count():
+            this = 'this is the last one!'
+            print this
+            return HttpResponseRedirect(reverse('questionnaire_finish'))
             
-            formdata=get_answers(form)
+        else:
             
-            
-            for(question_id,answer) in formdata:
-                #save question and answer before redirect
-
-                
-                question = get_object_or_404(Question, pk=question_id) 
-                thisinstance= AnswerSet(user=request.user,
-                                question=question,answer=answer)
-                thisinstance.save()
-
-            order_info = 2
-            return HttpResponseRedirect(reverse('questionapp_success'))
-            #return HttpResponseRedirect(reverse('get_questionsgroupid', kwargs = {'order_info' : order_info}))    
-#            for(question,answer) in formdata:
-#                if answer == 'True' :
-#                    return HttpResponseRedirect(reverse
-#                            ('questionapp.views.other_questionset',request, 
-#                                 kwargs={'username': request.user.username}))
-#                else:
-#                    return HttpResponseRedirect(reverse
-#                            ('questionapp.views.success',request, 
-#                                 kwargs={'username': request.user.username}))
-                    
+            this = 'Continue! pass order_info+1 !'
+            print this
+            order_info = order_info + 1
+            return HttpResponseRedirect(reverse('get_next_questiongroup', kwargs = {'questionnaire_id': questionnaire_id, 'order_info' : order_info}))
+    
     else:
-        
         return render_to_response('questionform.html', 
-                                  {'form': questionForm,},context_instance=RequestContext(request))
+        {'form': questionForm,},context_instance=RequestContext(request))
    
 
 
 
-def success_view(request):
-    return render_to_response('success.html') 
+def finish(request):
+    return render_to_response('finish.html') 
 
 
 
-def get_next_questionsgroupid(request,order_info,questionnaire):
-    '''
-    responsible for retrieving  the next questionset to render 
-    @return: the next question group id
-    '''
-    #for now lets use the First Questionnaire
-    #quest1 = Questionnaire(name='Questionnaire A B C')
-    order_info = int(order_info)    
-    questionnaire = int(questionnaire)      
-    quest = Questionnaire(id=questionnaire)
-    correct_order = QuestionOrder.objects.filter(questionnaire=quest).order_by('order_info')
-      
-    if order_info == 1:                
-        #get questiongroup_id that has order_info=1 on that group
-        questiongroup_id = int(correct_order[0].questiongroup.id)            
-        return HttpResponseRedirect(reverse('first_questionset',  kwargs = {'questiongroup_id' : questiongroup_id} ))   
-    else:
-        order_info = order_info - 1           
-        questiongroup_id = correct_order[order_info].questiongroup.id        
-        return HttpResponseRedirect(reverse('first_questionset',  kwargs = {'questiongroup_id' : questiongroup_id} ))
 
 
-def get_questionnaire(request,questionnaire_id):
-    '''
-    responsible in calling the questionnaire name, and giving the first question in order = 1!        
-    '''
-    questionnaire = int(questionnaire_id)    
-    
-    order_info = 1
-    return HttpResponseRedirect(reverse('get_questionsgroupid', kwargs = { 'order_info' : order_info , 'questionnaire' : questionnaire  } ))
-    
-
+#This is from the old view, I just left it here maybe you want to improve it based on this
 def get_answers(self):
     '''
     return question and answer pair tuple

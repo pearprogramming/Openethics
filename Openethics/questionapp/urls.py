@@ -4,21 +4,17 @@ from questionapp.views import *
 
 urlpatterns = patterns('questionapp.views',
         
-        url(r'^group/(?P<questiongroup_id>\d+)$', 
-            view = 'first_questionset',
-            name = 'first_questionset'),
+          url(r'^quest/(?P<questionnaire_id>\d+)/(?P<order_info>\d+)/$', 
+          view = 'get_next_questiongroup',
+          name = 'get_next_questiongroup'),
         
-        url(r'^success/$', 
-            view = 'success_view',
-            name = 'questionapp_success'),               
-        
-        url(r'^get/(?P<order_info>\d+)/(?P<questionnaire>\d+)/$', 
-            view = 'get_next_questionsgroupid',
-            name = 'get_questionsgroupid'),
-        
-        url(r'^qs/(?P<questionnaire_id>\d+)/$', 
-            view = 'get_questionnaire',
-            name = 'get_questionnaire_id'),                   
+          url(r'^quest/(?P<questionnaire_id>\d+)/$', 
+          view = 'get_next_questiongroup',
+          name = 'get_next_questiongroup'),
+                       
+        url(r'^finish/$', 
+            view = 'finish',
+            name = 'questionaire_finish'),                  
     
     
 )
