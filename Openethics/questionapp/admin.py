@@ -7,7 +7,7 @@ from django.contrib import admin
 from questionapp.models import *
  
 class QuestionAdmin(admin.ModelAdmin):
-    list_display=('label','field_type','optionanswer')
+    list_display=('label','field_type','selectoptions')
     
 class OptionAnswerAdmin(admin.ModelAdmin):
      

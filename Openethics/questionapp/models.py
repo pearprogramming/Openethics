@@ -8,6 +8,32 @@ from django.forms import forms
 
 from django.contrib.auth.models import User
 from datetime import datetime
+
+
+class CustomListField(models.TextField):
+    __metaclass__ = models.SubfieldBase
+
+    def __init__(self, *args, **kwargs):
+        self.token = kwargs.pop('token', ',')
+    
+        kwargs={'default':None,'null':True,'blank':True,'help_text':'Enter option for select Field Type seperated by comma e.g No ,Yes,Not Applicable '}
+        
+        super(CustomListField, self).__init__(*args, **kwargs)
+
+    def to_python(self, value):
+        if not value: return
+        if isinstance(value, list):
+            return value
+        return value.split(self.token)
+
+    def get_db_prep_value(self, value,connection,prepared=False):
+        if not value: return
+        assert(isinstance(value, list) or isinstance(value, tuple))
+        return self.token.join([unicode(s) for s in value])
+
+    def value_to_string(self, obj):
+        value = self._get_val_from_obj(obj)
+        return self.get_db_prep_value(value)
  
 class Questiongroup(models.Model):
     '''
@@ -22,7 +48,7 @@ class Questiongroup(models.Model):
         return self.questiongroupname
 
 
-FIELD_TYPE_CHOICES=((0,'charfield'),(1,'textfield'),(2,'boolean'),(3,'select'),)  
+FIELD_TYPE_CHOICES=(('charfield','charfield'),('textfield','textfield'),('booleanfield','boolean'),('selectfield','select'),)  
   
 class Question(models.Model):
     '''
@@ -33,20 +59,19 @@ class Question(models.Model):
         db_table ='question'
     
     label=models.CharField('question',max_length=255)
-    field_type=models.IntegerField(choices=FIELD_TYPE_CHOICES)
+    field_type=models.CharField(choices=FIELD_TYPE_CHOICES,max_length=100)
     questiongroup=models.ForeignKey(Questiongroup,related_name='questions')
-    optionanswer=models.CharField(max_length=100,blank=True,help_text='enter options for field type select ,each option seperated by comma e.g No , Yes,Not applicable')
-    
+    selectoptions=CustomListField()
     def __unicode__(self):
-        return self.label
+        return 'Question:%s FieldType:%s Questiongroup:%s Selectoptions:%s' %(self.label, self.field_type,self.questiongroup,self.selectoptions)
     def save(self,*args,**kwgs):
         if not self.id:
           
-          if self.field_type == 3: 
-            self.optionanswer = [self.optionanswer]
+          if self.field_type == 'selectfield': 
+            self.selectoptions = self.selectoptions
             
           else: 
-            self.optionanswer =''
+            self.selectoptions = None
         super(Question,self).save(*args,**kwgs)
     
 STATUS_TYPES =((0,'completed'),(1,'referred'),(2,'awaiting'),)
@@ -87,3 +112,4 @@ class QuestionOrder(models.Model):
     
     def __unicode__(self):
         return 'group:%s order:%s' %(self.questiongroup, str(self.order_info))
+

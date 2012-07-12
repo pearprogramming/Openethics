@@ -20,9 +20,10 @@ def generate_boolean_field():
     return BooleanField(initial= False)
 
 FIELD_TYPES={
-            0: generate_charfield ,
-            1: generate_textfield,
-            2: generate_boolean_field
+            'charfield': generate_charfield ,
+            'textfield': generate_textfield,
+            'booleanfield': generate_boolean_field,
+            
             }
 def make_question_group_form(questiongroup_id):
     '''
