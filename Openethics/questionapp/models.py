@@ -1,13 +1,11 @@
 '''
-Created on Jun 26, 2012
+Created on Jul 10, 2012
 
-@author: ayoola_al
+@author: mzd2
 '''
 from django.db import models
-from django.forms import forms
 
 from django.contrib.auth.models import User
-from datetime import datetime
 
 
 class CustomListField(models.TextField):
@@ -36,23 +34,11 @@ class CustomListField(models.TextField):
 
     def value_to_string(self, obj):
         value = self._get_val_from_obj(obj)
-        return self.get_db_prep_value(value)
- 
-class Questiongroup(models.Model):
-    '''
-    reponsible for question groups ,each group set can have one to  many set of questions 
-    order_no store the order or sequence the question group is to be rendered .e.g  order_no = 2 will be rendered before order_no =3  
-    '''
-    class Meta():
-        db_table ='questiongroup'
-    questiongroupname = models.CharField('question group name',max_length=255,unique=True)
+        return self.get_db_prep_value(value) 
+
+
+FIELD_TYPE_CHOICES=(('charfield','charfield'),('textfield','textfield'),('booleanfield','boolean'),('selectfield','select'),)
     
-    def __unicode__(self):
-        return self.questiongroupname
-
-
-FIELD_TYPE_CHOICES=(('charfield','charfield'),('textfield','textfield'),('booleanfield','boolean'),('selectfield','select'),)  
-  
 class Question(models.Model):
     '''
     responsible for storing questions
@@ -62,56 +48,93 @@ class Question(models.Model):
         db_table ='question'
     
     label=models.CharField('question',max_length=255)
-    field_type=models.CharField(choices=FIELD_TYPE_CHOICES,max_length=100)
-    questiongroup=models.ForeignKey(Questiongroup,related_name='questions')
+    field_type=models.CharField(choices=FIELD_TYPE_CHOICES,max_length=100)    
     selectoptions=CustomListField()
+
     def __unicode__(self):
-        return 'Question:%s FieldType:%s Questiongroup:%s Selectoptions:%s' %(self.label, self.field_type,self.questiongroup,self.selectoptions)
+        return 'Question:%s FieldType:%s Selectoptions:%s' %(self.label, self.field_type,self.selectoptions)
+    
     def save(self,*args,**kwgs):
         if not self.id:
-          
-          if self.field_type == 'selectfield': 
-            self.selectoptions = self.selectoptions
+            if self.field_type == 'selectfield': 
+                self.selectoptions = self.selectoptions
             
-          else: 
-            self.selectoptions = None
+            else: 
+                self.selectoptions = None
         super(Question,self).save(*args,**kwgs)
+
     
-STATUS_TYPES =((0,'completed'),(1,'referred'),(2,'awaiting'),)
-
- 
-class AnswerSet(models.Model):
+class QuestionGroup(models.Model):
     '''
-    this class datamodel for storing users questions and answer 
-
+    reponsible for question groups ,each group set can have one to  many set of questions 
+    order_no store the order or sequence the question group is to be rendered .e.g  order_no = 2 will be rendered before order_no =3  
     '''
     class Meta():
-        db_table ='answer_set'
-    user=models.ForeignKey(User)
-    question=models.ForeignKey(Question)
-    answer=models.CharField(max_length=250)
+        db_table ='questiongroup'
+    name = models.CharField('questiongroupname',max_length=255,unique=True)
+    questions = models.ManyToManyField(Question, through = 'Question_order')
     
-    def save(self, *args, **kwargs):                       
-        super(AnswerSet, self).save(*args, **kwargs)
-        
+    def __unicode__(self):
+        return self.name
+   
 class Questionnaire(models.Model):
     '''
-    This class stores the list of order set
+    This class stores the Questionnaire name
     '''
     name=models.CharField(max_length=250)
-    questiongroup=models.ManyToManyField(Questiongroup, through='QuestionOrder')
+    questiongroup=models.ManyToManyField(QuestionGroup, through='QuestionGroup_order')
+    
+    def get_ordered_groups(self):
+        return QuestionGroup_order.objects.filter(questionnaire=self).order_by('order_info')
     
     def __unicode__(self):
         return self.name
     
-class QuestionOrder(models.Model):
+class QuestionGroup_order(models.Model):
     '''
     This class stores the ordering of the question rendered on the page
     '''
-    questiongroup=models.ForeignKey(Questiongroup)
+    questiongroup=models.ForeignKey(QuestionGroup)
     questionnaire=models.ForeignKey(Questionnaire)
     order_info=models.IntegerField(max_length=3)
     
     def __unicode__(self):
         return 'group:%s order:%s' %(self.questiongroup, str(self.order_info))
+    
+    
+class Question_order(models.Model):
+    '''
+    This class is responsible in storing the ordering relation ship between the question and questiongroup
+    '''
+    questiongroup =models.ForeignKey(QuestionGroup)
+    question = models.ForeignKey(Question)
+    order_info = models.IntegerField(max_length=3)
+    
+    def __unicode__(self):
+        return 'group:%s order:%s' %(self.question, str(self.order_info))
+    
+    
+        
+class AnswerSet(models.Model):
+    '''
+    this class datamodel for storing users and questionnaire
 
+    '''
+    class Meta():
+        db_table ='answer_set'
+    user=models.ForeignKey(User)
+    questionnaire=models.ForeignKey(Questionnaire)
+    
+    
+    
+    def save(self, *args, **kwargs):                       
+        super(AnswerSet, self).save(*args, **kwargs)    
+        
+class QuestionAnswer(models.Model):    
+    '''
+    This model is used to store reusable question, answer and answer_set
+    '''
+    question = models.ForeignKey(Question)
+    answer = models.CharField(max_length=255)
+    answer_set = models.ForeignKey(AnswerSet)
+    
