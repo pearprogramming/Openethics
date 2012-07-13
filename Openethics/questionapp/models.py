@@ -4,9 +4,11 @@ Created on Jul 10, 2012
 @author: mzd2
 @author: ayoola_al
 '''
+from __future__ import unicode_literals
 from django.db import models
 
 from django.contrib.auth.models import User
+
 
 
 class CustomListField(models.TextField):
@@ -18,17 +20,24 @@ class CustomListField(models.TextField):
     def __init__(self, *args, **kwargs):
         self.token = kwargs.pop('token', ',')
     
-        kwargs={'default':None,'null':True,'blank':True,'help_text':'Enter option for select Field Type seperated by comma e.g No ,Yes,Not Applicable '}
+        kwargs={'default':None,'null':True,'blank':True,
+                'help_text':'Enter option for select Field Type seperated by comma e.g No ,Yes,Not Applicable ./n TO EDIT EXISTING OPTIONS CLEAR THE OPTIONS AND TYPE AFRESH '}
         
         super(CustomListField, self).__init__(*args, **kwargs)
 
     def to_python(self, value):
+        '''
+        @return: list if it exist 
+        '''
         if not value: return
         if isinstance(value, list):
             return value
         return value.split(self.token)
 
     def get_db_prep_value(self, value,connection=None,prepared=False):
+        '''
+        @return string separated by token as stored in database
+        '''
         if not value: return
         assert(isinstance(value, list) or isinstance(value, tuple))
         return self.token.join([unicode(s) for s in value])
@@ -37,7 +46,7 @@ class CustomListField(models.TextField):
         value = self._get_val_from_obj(obj)
         return self.get_db_prep_value(value) 
 
-
+     
 FIELD_TYPE_CHOICES=(('charfield','charfield'),('textfield','textfield'),('booleanfield','boolean'),('selectfield','select'),)
     
 class Question(models.Model):
@@ -53,13 +62,13 @@ class Question(models.Model):
     selectoptions=CustomListField()
 
     def __unicode__(self):
-        return 'Question:%s FieldType:%s Selectoptions:%s' %(self.label, self.field_type,self.selectoptions)
+        return 'Question:%s FieldType:%s Selectoptions:%s' %(self.label, self.field_type,str(self.selectoptions))
     
     def save(self,*args,**kwgs):
         if not self.id:
             if self.field_type == 'selectfield': 
+              
                 self.selectoptions = self.selectoptions
-            
             else: 
                 self.selectoptions = None
         super(Question,self).save(*args,**kwgs)
@@ -125,7 +134,9 @@ class AnswerSet(models.Model):
         db_table ='answer_set'
     user=models.ForeignKey(User)
     questionnaire=models.ForeignKey(Questionnaire)
-        
+    
+    
+    
     def save(self, *args, **kwargs):                       
         super(AnswerSet, self).save(*args, **kwargs)    
         

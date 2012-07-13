@@ -11,15 +11,24 @@ from django.forms.fields import CharField,BooleanField,ChoiceField
 from django.utils.datastructures import SortedDict
 
 
+class CustomError(Exception):
+       def __init__(self, value):
+         self.value = value
+       def __str__(self):
+         return repr(self.value)
 
 
 def get_choices(question):
     '''
      @return: choices for a select type question
     '''
-    choices_list=question.selectoptions
-    choices= [(x,x) for x in choices_list]
-    return choices
+    try: 
+        choices_list = question.selectoptions
+        choices= [(x,x) for x in choices_list]
+        return choices
+    except CustomError as e:
+         msg='exception has occurred Not a valid List : s%' % e.value
+         raise MyError(msg)
 
 def generate_charfield():
     return CharField(max_length=100)

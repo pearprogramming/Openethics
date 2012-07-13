@@ -8,7 +8,7 @@ from django.contrib import admin
 from models import Question, QuestionGroup, Questionnaire, QuestionGroup_order, Question_order, AnswerSet, QuestionAnswer
  
 class QuestionAdmin(admin.ModelAdmin):
-    list_display=('label','field_type')
+    list_display=('label','field_type','selectoptions')
     
 
 
