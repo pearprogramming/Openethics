@@ -6,16 +6,20 @@ Created on Jun 26, 2012
 '''
 
 from django import forms
-from models import QuestionGroup
+from models import QuestionGroup,Question_order
 from django.forms.fields import CharField,BooleanField,ChoiceField
+from django.utils.datastructures import SortedDict
 
 
 
 
 def get_choices(question):
-     choices_list=question.selectoptions
-     choices= [(x,x) for x in choices_list]
-     return choices
+    '''
+     @return: choices for a select type question
+    '''
+    choices_list=question.selectoptions
+    choices= [(x,x) for x in choices_list]
+    return choices
 
 def generate_charfield():
     return CharField(max_length=100)
@@ -27,6 +31,9 @@ def generate_boolean_field():
     return BooleanField(initial= False)
 
 def generate_selectfield_field():
+    '''
+    @return: return form ChoiceField
+    '''
     return ChoiceField(choices=[])
     
 
@@ -40,11 +47,12 @@ FIELD_TYPES={
 
 def make_question_group_form(questiongroup_id):
     '''
-     mapping questions fields  type  to form fields type 
+     dynamiccally mapping questions fields  types  to form fields type 
      @return: type form for specific questiongroup 
     
     '''
-    fields={}
+    
+    fields = SortedDict([])
     thisgroupquestions = QuestionGroup.objects.get(id=questiongroup_id).questions.all()
     
     for question in thisgroupquestions:
@@ -58,7 +66,8 @@ def make_question_group_form(questiongroup_id):
             field = FIELD_TYPES[question.field_type]()
             field.label = question.label
             fields[str(question.id)]= field
-        
+    
+    
     return type('QuestionForm',(forms.BaseForm,),{'base_fields':fields})
 
 

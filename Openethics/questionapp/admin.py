@@ -2,6 +2,7 @@
 Created on Jul 11, 2012
 
 @author: mzd2
+@author: ayoola_al
 '''
 from django.contrib import admin
 from models import Question, QuestionGroup, Questionnaire, QuestionGroup_order, Question_order, AnswerSet, QuestionAnswer
@@ -38,10 +39,6 @@ class QuestiongroupAdmin(admin.ModelAdmin):
 class Question_OrderAdmin(admin.ModelAdmin):
     list_display = ('questiongroup','question','order_info')
     
-
-
-
-
 
 class AnswerSetAdmin(admin.ModelAdmin):
     list_display=('user','questionnaire')

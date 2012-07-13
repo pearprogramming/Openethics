@@ -2,6 +2,7 @@
 Created on Jul 10, 2012
 
 @author: mzd2
+@author: ayoola_al
 '''
 from django.db import models
 
@@ -124,9 +125,7 @@ class AnswerSet(models.Model):
         db_table ='answer_set'
     user=models.ForeignKey(User)
     questionnaire=models.ForeignKey(Questionnaire)
-    
-    
-    
+        
     def save(self, *args, **kwargs):                       
         super(AnswerSet, self).save(*args, **kwargs)    
         
