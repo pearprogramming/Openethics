@@ -66,8 +66,7 @@ class Question(models.Model):
     
     def save(self,*args,**kwgs):
         if not self.id:
-            if self.field_type == 'selectfield': 
-              
+            if self.field_type == 'selectfield':               
                 self.selectoptions = self.selectoptions
             else: 
                 self.selectoptions = None

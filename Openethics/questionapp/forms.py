@@ -17,17 +17,16 @@ class CustomError(Exception):
        def __str__(self):
          return repr(self.value)
 
-
 def get_choices(question):
     '''
-     @return: choices for a select type question
+     @return: choices for a given select type question
     '''
     try: 
         choices_list = question.selectoptions
         choices= [(x,x) for x in choices_list]
         return choices
     except CustomError as e:
-         msg='exception has occurred Not a valid List : s%' % e.value
+         msg='Exception has occurred not a valid List : s%' % e.value
          raise MyError(msg)
 
 def generate_charfield():
@@ -54,9 +53,9 @@ FIELD_TYPES={
             }
 
 
-def make_question_group_form(questiongroup_id):
+def make_question_group_form(questiongroup_id,questionnairename):
     '''
-     dynamiccally mapping questions fields  types  to form fields type 
+     dynamically mapping questions fields  types  to form fields type 
      @return: type form for specific questiongroup 
     
     '''
@@ -75,10 +74,7 @@ def make_question_group_form(questiongroup_id):
             field = FIELD_TYPES[question.field_type]()
             field.label = question.label
             fields[str(question.id)]= field
-    
-    
-    return type('QuestionForm',(forms.BaseForm,),{'base_fields':fields})
+        
+    return type('%s Form' % str(questionnairename),(forms.BaseForm,),{'base_fields':fields})
 
-
-  
             
