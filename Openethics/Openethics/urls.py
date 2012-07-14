@@ -27,7 +27,7 @@ urlpatterns = patterns('',
       ('^accounts/profile/', include('basic.profiles.urls')),
       #  (r'^profiles/', include('profile.backends.simple.url')),
       # (r'^profile/', include('profile.urls')),
-
+      
 
       (r'^$', direct_to_template,
           { 'template': 'index.html' }, 'index'),

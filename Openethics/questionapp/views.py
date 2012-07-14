@@ -10,6 +10,7 @@ from models import QuestionGroup_order, Questionnaire,QuestionGroup,AnswerSet,Qu
 from django.template import  RequestContext
 from django.shortcuts import render_to_response
 from forms import make_question_group_form
+from django.core.paginator import Paginator, InvalidPage, EmptyPage
 
 def index (request):
     return HttpResponseRedirect(reverse('index'))
@@ -68,10 +69,19 @@ def get_next_questiongroup(request,questionnaire_id,order_info=None):
 def finish(request):
     return render_to_response('finish.html') 
 
-
+def display_question_answer(request,questionnaire_id):
+    if request.method=='GET':
+        user=request.user
+        questionanswer=QuestionAnswer.objects.values()
+        paginator = Paginator(questionanswer, 2)  
+        context=questionanswer
+        print context
+    return render_to_response('questionanswer.html',{'context':context,},context_instance=RequestContext(request))
+         
 
 #This is from the old view, I just left it here maybe you want to improve it based on this
 
+# some helper functions for form data processing etc
 
 def get_answers(self):
     '''
@@ -86,7 +96,7 @@ def get_answers(self):
         
         yield (question, answer)
         
-        
+
 def get_total_group_questions(questiongroup_id):
     '''
     @return: total number of questions in the given questiongroup

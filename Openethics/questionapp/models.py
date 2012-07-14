@@ -6,7 +6,6 @@ Created on Jul 10, 2012
 '''
 from __future__ import unicode_literals
 from django.db import models
-
 from django.contrib.auth.models import User
 
 
@@ -141,7 +140,7 @@ class AnswerSet(models.Model):
         
 class QuestionAnswer(models.Model):    
     '''
-    This model is used to store reusable question, answer and answer_set
+    This model is used to store question, answer and answer_set
     '''
     question = models.ForeignKey(Question)
     answer = models.CharField(max_length=255)

@@ -75,6 +75,6 @@ def make_question_group_form(questiongroup_id,questionnairename):
             field.label = question.label
             fields[str(question.id)]= field
         
-    return type('%s Form' % str(questionnairename),(forms.BaseForm,),{'base_fields':fields})
+    return type('%sForm' % str(questionnairename),(forms.BaseForm,),{'base_fields':fields})
 
-            
+         

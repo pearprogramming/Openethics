@@ -15,7 +15,7 @@ urlpatterns = patterns('questionapp.views',
         url(r'^finish/$', 
             view = 'finish',
             name = 'questionnaire_finish'),                  
-    
-    
+         url(r'^qa/((?P<questionnaire_id>\d+))/$',view='display_question_answer',name= 'questionanswer'),
+       
 )
 
