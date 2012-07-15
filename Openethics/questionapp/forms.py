@@ -9,6 +9,7 @@ from django import forms
 from models import QuestionGroup,Question_order
 from django.forms.fields import CharField,BooleanField,ChoiceField
 from django.utils.datastructures import SortedDict
+from django.forms.widgets import RadioSelect
 
 
 class CustomError(Exception):
@@ -30,10 +31,13 @@ def get_choices(question):
          raise MyError(msg)
 
 def generate_charfield():
-    return CharField(max_length=100)
+    '''
+     @return charfield ,you can change the default attribute
+    '''
+    return CharField(max_length=100,widget=forms.TextInput(attrs={'size':'40'}))
 
 def generate_textfield():
-    return CharField(widget = forms.Textarea)
+    return CharField(widget = forms.Textarea(attrs={'rows':'4','cols':'40',}))
 
 def generate_boolean_field():
     return BooleanField(initial= False)
@@ -41,15 +45,23 @@ def generate_boolean_field():
 def generate_selectfield_field():
     '''
     @return: return form ChoiceField
+     
     '''
     return ChoiceField(choices=[])
-    
+
+def generate_radioselect_field():
+   '''
+    @return radioselect field
+   ''' 
+   return ChoiceField(widget=RadioSelect,choices=[])
+
 
 FIELD_TYPES={
             'charfield': generate_charfield ,
             'textfield': generate_textfield,
             'booleanfield': generate_boolean_field,
             'selectfield':generate_selectfield_field,
+            'radioselect':generate_radioselect_field,
             }
 
 
@@ -64,7 +76,7 @@ def make_question_group_form(questiongroup_id,questionnairename):
     thisgroupquestions = QuestionGroup.objects.get(id=questiongroup_id).questions.all()
     
     for question in thisgroupquestions:
-        if question.field_type == 'selectfield':
+        if question.field_type == 'selectfield' or question.field_type == 'radioselect' :
            tempfield=FIELD_TYPES[question.field_type]()
            tempfield.choices=get_choices(question)
            field=tempfield

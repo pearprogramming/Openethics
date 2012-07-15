@@ -46,7 +46,7 @@ class CustomListField(models.TextField):
         return self.get_db_prep_value(value) 
 
      
-FIELD_TYPE_CHOICES=(('charfield','charfield'),('textfield','textfield'),('booleanfield','boolean'),('selectfield','select'),)
+FIELD_TYPE_CHOICES=(('charfield','charfield'),('textfield','textfield'),('booleanfield','boolean'),('selectfield','select'),('radioselect','radioselect'))
     
 class Question(models.Model):
     '''
@@ -65,7 +65,7 @@ class Question(models.Model):
     
     def save(self,*args,**kwgs):
         if not self.id:
-            if self.field_type == 'selectfield':               
+            if self.field_type == 'selectfield'or self.field_type == 'radioselect':               
                 self.selectoptions = self.selectoptions
             else: 
                 self.selectoptions = None

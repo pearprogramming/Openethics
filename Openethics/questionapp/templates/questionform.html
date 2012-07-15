@@ -1,5 +1,4 @@
 
-
 <form method="post" action=".">
 {% load questionapp_extra %}
 	<title> {{thisquestionnairename}}</title>
@@ -15,18 +14,15 @@
   
        {% if field.field.widget|klass == 'ChoiceField' %}
        <p>  {{ field.errors }}</p>
-    
-       <p>  {{ field.label_tag }}: {{ field }}</p>
+       <p>  {{ field.label_tag }}: <br>{{ field }}</p>
      
-         {% else %}
-        <p>  {{ field.errors }}</p>
-        
-        <p>  {{ field.label_tag }}:<br />{{ field }}</p>
-      
-      <br/>
+        {% else %}
+           <p>  {{ field.errors }}</p> 
+            <p>  {{ field.label_tag }}:{{ field }}</p>
+          
       {% endif %}
     
-     </div>
+       </div>
 {% endfor %}
 
  
