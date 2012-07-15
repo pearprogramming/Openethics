@@ -73,6 +73,7 @@ def display_question_answer(request,questionnaire_id):
     if request.method=='GET':
         user=request.user
         questionanswer=QuestionAnswer.objects.values()
+        
         paginator = Paginator(questionanswer, 2)  
         context=questionanswer
         print context
