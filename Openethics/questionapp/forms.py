@@ -42,7 +42,7 @@ def generate_textfield():
 def generate_boolean_field():
     return BooleanField(initial= False)
 
-def generate_selectfield_field():
+def generate_select_dropdown_field():
     '''
     @return: return form ChoiceField
      
@@ -65,7 +65,7 @@ FIELD_TYPES={
             'charfield': generate_charfield ,
             'textfield': generate_textfield,
             'booleanfield': generate_boolean_field,
-            'selectfield':generate_selectfield_field,
+            'select_dropdown_field':generate_select_dropdown_field,
             'radioselectfield':generate_radioselect_field,
             'multiplechoicefield':generate_multiplechoice_field,
             }
@@ -82,7 +82,7 @@ def make_question_group_form(questiongroup_id,questionnairename):
     thisgroupquestions = QuestionGroup.objects.get(id=questiongroup_id).questions.all()
     
     for question in thisgroupquestions:
-        if question.field_type == 'selectfield' or question.field_type == 'radioselectfield' or question.field_type =='multiplechoicefield':
+        if question.field_type == 'select_dropdown_field' or question.field_type == 'radioselectfield' or question.field_type =='multiplechoicefield':
            tempfield=FIELD_TYPES[question.field_type]()
            tempfield.choices=get_choices(question)
            field=tempfield
