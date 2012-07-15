@@ -7,9 +7,9 @@ Created on Jun 26, 2012
 
 from django import forms
 from models import QuestionGroup,Question_order
-from django.forms.fields import CharField,BooleanField,ChoiceField
+from django.forms.fields import CharField,BooleanField,ChoiceField,MultipleChoiceField
 from django.utils.datastructures import SortedDict
-from django.forms.widgets import RadioSelect
+from django.forms.widgets import RadioSelect ,CheckboxSelectMultiple
 
 
 class CustomError(Exception):
@@ -51,9 +51,14 @@ def generate_selectfield_field():
 
 def generate_radioselect_field():
    '''
-    @return radioselect field
+    @return radioselect field no default set
    ''' 
-   return ChoiceField(widget=RadioSelect,choices=[])
+   return ChoiceField(widget=RadioSelect,choices=[])def generate_multiplechoice_field():
+    '''
+    @return MultipleChoiceField
+    '''
+    return MultipleChoiceField(choices=[], widget=forms.CheckboxSelectMultiple())
+
 
 
 FIELD_TYPES={
@@ -61,7 +66,8 @@ FIELD_TYPES={
             'textfield': generate_textfield,
             'booleanfield': generate_boolean_field,
             'selectfield':generate_selectfield_field,
-            'radioselect':generate_radioselect_field,
+            'radioselectfield':generate_radioselect_field,
+            'multiplechoicefield':generate_multiplechoice_field,
             }
 
 
@@ -76,7 +82,7 @@ def make_question_group_form(questiongroup_id,questionnairename):
     thisgroupquestions = QuestionGroup.objects.get(id=questiongroup_id).questions.all()
     
     for question in thisgroupquestions:
-        if question.field_type == 'selectfield' or question.field_type == 'radioselect' :
+        if question.field_type == 'selectfield' or question.field_type == 'radioselectfield' or question.field_type =='multiplechoicefield':
            tempfield=FIELD_TYPES[question.field_type]()
            tempfield.choices=get_choices(question)
            field=tempfield
