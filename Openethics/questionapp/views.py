@@ -17,54 +17,34 @@ def index (request):
 
 
 
-def get_next_questiongroup(request,questionnaire_id,order_info=None):
-#    retrieve questionnaire object please dont touch this two lines for now
-    this_questionnaire= get_questionnnaire_obj(questionnaire_id)
-    this_questionnaire_name=get_questionnnaire_name(questionnaire_id)
+def get_next_questiongroup(request,questionnaire_id):
     
-    questionnaire_id = int(questionnaire_id)
-    
-    if order_info==None:
-        order_info = 1
-
-    else:
-        order_info = int(order_info)
+#     retrieve questionnaire object please dont touch this two lines for now
+      this_questionnaire= get_questionnnaire_obj(questionnaire_id)
+      this_questionnaire_name=get_questionnnaire_name(questionnaire_id)
+      questiongroup_id_generator=get_next_questiongroupid(this_questionnaire)
+      
+#      for questiongroup_id in  questiongroup_id_generator:
+      questionForm = make_question_group_form(10,this_questionnaire_name)      
+#      print questiongroup_id
+      if request.method =='POST' :     
         
-    quest = Questionnaire.objects.get(pk=questionnaire_id)
-    orderedgroups = quest.get_ordered_groups()
-    
-    #below prints the questiongroup id! so it can be used to render a group!
-    questiongroup_id = orderedgroups[order_info-1].questiongroup.id    
-    
-    questionForm = make_question_group_form(questiongroup_id,this_questionnaire_name)
-    
-    if request.method =='POST':
-        
-        if order_info == orderedgroups.count():
-            this = 'this is the last one!'
-            print this
-            return HttpResponseRedirect(reverse('questionnaire_finish'))
-            
-        else:
-            
-            order_info = order_info + 1
 #           this handle the validation and cleaning of all form data using django validation 
 #           if you want to do custom validation you have overwrite django's and put what you require from each for form field
-            form=questionForm(request.POST)
-            if form.is_valid():
+                form=questionForm(request.POST)
+                if form.is_valid():
                     formdata=get_answers(form)
                     for question,answer in formdata:
                       this_answer_set= AnswerSet(user=request.user,questionnaire=this_questionnaire)
                       this_answer_set.save()
                       this_question_answer=QuestionAnswer(question=get_question_obj(question),answer=answer,answer_set=this_answer_set)
                       this_question_answer.save()
-                                    
-            return HttpResponseRedirect(reverse('get_next_questiongroup', kwargs = {'questionnaire_id': questionnaire_id, 'order_info' : order_info}))
-    
-    else:
-        return render_to_response('questionform.html', 
-        {'form': questionForm,'thisquestionnairename':this_questionnaire_name,'questionnaire_id':questionnaire_id,},context_instance=RequestContext(request))
-   
+                return HttpResponseRedirect(reverse('get_next_questiongroup', kwargs = {'questionnaire_id': questionnaire_id,}))
+      
+      else: return render_to_response('questionform.html', 
+                                     {'form': questionForm,'thisquestionnairename':this_questionnaire_name,'questionnaire_id': questionnaire_id,},context_instance=RequestContext(request))
+      if not questiongroup_id_generator.next:
+                     return HttpResponseRedirect(reverse('questionnaire_finish'))
 
 def finish(request):
     return render_to_response('finish.html') 
@@ -76,7 +56,6 @@ def display_question_answer(request,questionnaire_id):
         
         paginator = Paginator(questionanswer, 2)  
         context=questionanswer
-        print context
     return render_to_response('questionanswer.html',{'context':context,},context_instance=RequestContext(request))
          
 
@@ -97,7 +76,22 @@ def get_answers(self):
         
         yield (question, answer)
         
-
+def get_next_questiongroupid(this_questionnaire):
+    '''
+     retrieve ordered groups for given questionnaire ordered by order_info put them in a list
+     generator return next questiogroup
+     for example
+     orderedgroups =[{'questionnaire_id': 1, 'id': 1, 'order_info': 1, 'questiongroup_id': 10},
+     {'questionnaire_id': 1, 'id': 2, 'order_info': 3, 'questiongroup_id': 11}]
+     orderlist = [10, 11]
+     @return: next questiongroup_id
+    '''
+    orderedgroups = QuestionGroup_order.objects.filter(questionnaire= this_questionnaire).order_by('order_info').values()
+    orderlist=([ordergroup['questiongroup_id'] for ordergroup in orderedgroups])
+    for i, group_id in enumerate(orderlist):
+        yield  group_id
+    
+    
 def get_total_group_questions(questiongroup_id):
     '''
     @return: total number of questions in the given questiongroup
