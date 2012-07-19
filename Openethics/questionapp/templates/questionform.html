@@ -12,7 +12,7 @@
     <div class="fieldWrapper">
      
   
-       {% if field.field.widget|klass == 'ChoiceField' %}
+       {% if field.field.widget| klass == 'ChoiceField' %}
        <p>  {{ field.errors }}</p>
        <p>  {{ field.label_tag }}: <br>{{ field }}</p>
      
